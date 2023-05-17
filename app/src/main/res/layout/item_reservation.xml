@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/sport"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:text="Sport"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+
+        />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:text="Date"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+
+        />
+
+    <TextView
+        android:id="@+id/slot"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:text="Slot"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+
+        />
+
+</LinearLayout>

@@ -1,0 +1,35 @@
+<resources>
+
+    <string name="app_name">Lab3</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string-array name="sports">
+        <item>Football</item>
+        <item>Basketball</item>
+        <item>Tennis</item>
+        <item>Volleyball</item>
+        <item>Padel</item>
+    </string-array>
+
+    <string name="available_presentation">Select a discipline and a date to check for available playgrounds:</string>
+
+    <string-array name="slots">
+        <item tag="1">1->8:00-10:00</item>
+        <item tag="2">2->10:00-12:00</item>
+        <item tag="3">3->12:00-14:00</item>
+        <item tag="4">4->14:00-16:00</item>
+        <item tag="5">5->16:00-18:00</item>
+        <item tag="6">6->18:00-20:00</item>
+        <item tag="7">7->20:00-22:00</item>
+    </string-array>
+
+    <string name="select_sport">Select sport</string>
+
+    <string name="select_slot">Select slot</string>
+
+    <string name="fecha_reserva">Selected Date: %1$s</string>
+    <string name="selected_sport">Selected Sport: %1$s</string>
+    <string name="display_user">Select a Reservation to see the details, %1$s!</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

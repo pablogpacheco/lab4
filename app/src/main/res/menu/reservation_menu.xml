@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Availability"
+        android:icon="@drawable/ic_calendar_all"
+        android:id="@+id/listFragment"
+        />
+
+    <item android:title="My Reservations"
+        android:icon="@drawable/ic_sports"
+        android:id="@+id/categoryFragment"
+        />
+
+</menu>
