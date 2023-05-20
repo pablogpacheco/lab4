@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".fragments.profile.edit_profileFragment"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/camera"
+            />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/ic_profile" />
+
+        <EditText
+            android:id="@+id/nameField"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Insert full name"
+            android:inputType="textPersonName"
+            android:textColor="#3F51B5" />
+
+        <EditText
+            android:id="@+id/nicknameField"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Insert nickname"
+            android:inputType="text"
+            android:textColor="#3F51B5" />
+
+        <EditText
+            android:id="@+id/emailField"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="Insert email"
+            android:textColor="#3F51B5" />
+
+        <EditText
+            android:id="@+id/phoneNumberField"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Insert phone number"
+            android:inputType="phone"
+
+            android:textColor="#3F51B5" />
+
+
+
+        <Button
+            android:id="@+id/saveChanges"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SAVE" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCEL" />
+
+
+    </LinearLayout>
+</ScrollView>

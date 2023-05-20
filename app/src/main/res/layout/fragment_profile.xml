@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="10dp"
+
+    android:background="#B1E3FE"
+
+    tools:context=".fragments.profile.profileFragment"
+    >
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_profile"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_weight="2">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="206dp"
+            android:layout_height="wrap_content"
+            android:text="@string/full_name"
+
+            android:textColor="#3F51B5"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/nickname"
+            android:layout_width="206dp"
+            android:layout_height="wrap_content"
+
+            android:text="@string/nickname"
+            android:textColor="#3F51B5" />
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="206dp"
+            android:layout_height="wrap_content"
+
+            android:text="@string/email"
+            android:textColor="#3F51B5" />
+
+        <TextView
+            android:id="@+id/phoneNumber"
+            android:layout_width="206dp"
+            android:layout_height="wrap_content"
+
+            android:text="@string/phoneNumber"
+            android:textColor="#3F51B5" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
