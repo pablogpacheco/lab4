@@ -6,9 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".fragments.profile.edit_profileFragment"
+    tools:context=".fragments.profile.EditFragment"
     >
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +22,7 @@
             android:layout_height="50dp"
             android:scaleType="fitCenter"
             android:src="@drawable/camera"
-            />
+            android:contentDescription= "Add an image!" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -61,10 +60,7 @@
             android:layout_height="wrap_content"
             android:hint="Insert phone number"
             android:inputType="phone"
-
             android:textColor="#3F51B5" />
-
-
 
         <Button
             android:id="@+id/saveChanges"
@@ -77,7 +73,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CANCEL" />
-
 
     </LinearLayout>
 </ScrollView>

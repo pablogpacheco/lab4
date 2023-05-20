@@ -22,6 +22,13 @@
         <item tag="7">7->20:00-22:00</item>
     </string-array>
 
+    <string name="full_name"> Full name </string>
+    <string name="nickname">Nickname</string>
+    <string name="email">Email</string>
+    <string name="phoneNumber">Phone Number</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+
     <string name="select_sport">Select sport</string>
 
     <string name="select_slot">Select slot</string>

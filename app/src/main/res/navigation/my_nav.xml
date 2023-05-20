@@ -75,4 +75,24 @@
             app:destination="@id/calendarFragment"
             app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="it.polito.mas.lab3.fragments.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment2_to_edit_profileFragment"
+            app:destination="@id/edit_profileFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/edit_profileFragment"
+        android:name="it.polito.mas.lab3.fragments.profile.EditFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_edit_profileFragment_to_profileFragment2"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
 </navigation>
