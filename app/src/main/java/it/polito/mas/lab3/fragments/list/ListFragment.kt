@@ -60,7 +60,8 @@ class ListFragment : Fragment() {
             //val selectedDateLong = arguments?.getLong("selected_date_res")
             //val selectedDateColor = arguments?.getInt("selected_date_color")
             //val selectedDate = selectedDateLong?.let { Date(it) }
-            reservedDates = arguments?.getSerializable("reserved_dates") as List<Reservation>
+            if (arguments?.getSerializable("reserved_dates") != null)
+                reservedDates = arguments?.getSerializable("reserved_dates") as List<Reservation>
 
             //para todas las fechas de reservedDates agregar un decorator o para cadda selectedDay
 
