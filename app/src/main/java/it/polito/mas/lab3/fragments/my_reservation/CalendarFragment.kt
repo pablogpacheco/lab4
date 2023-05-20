@@ -23,10 +23,7 @@ import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationAdapter
 import it.polito.mas.lab3.data.ReservationViewModel
-import it.polito.mas.lab3.models.Slot
-import it.polito.mas.lab3.models.SlotAdapter
 import java.text.SimpleDateFormat
-import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -86,13 +83,12 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val myUser = arguments?.getString("my_username") ?: ""
-
         calendarView.setCalendarListener(object : CalendarListener {
+            @SuppressLint("SimpleDateFormat")
             override fun onDateSelected(date: Date?) {
 
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-                val actualDate = dateFormat.parse(dateFormat.format(date))
+                val actualDate = dateFormat.parse(dateFormat.format(date!!))
                 val actualList = mutableListOf<Reservation>()
 
                 //Check if the list of the user for this date contains reservations:
@@ -118,6 +114,13 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
                         }
                     }
                 }
+                else{
+                    Toast.makeText(
+                        requireContext(),
+                        "No reservation present in this date.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
 
             override fun onMonthChanged(monthStartDate: Date?) {
@@ -131,6 +134,7 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onItemClick(reservation: Reservation) {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
@@ -139,7 +143,7 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
             "reservation_id" to reservation.id,
             "reservation_username" to reservation.username,
             "reservation_sport" to reservation.sport_category,
-            "reservation_date" to dateFormat.format(reservation.date),
+            "reservation_date" to dateFormat.format(reservation.date!!),
             "reservation_slot" to reservation.slot,
         )
         findNavController().navigate(R.id.action_calendarFragment_to_modifyFragment, args)
@@ -148,24 +152,24 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
 }
 
 private class ValidDate (val list: List<Reservation>): DayDecorator {
+    @SuppressLint("SimpleDateFormat")
     override fun decorate(p0: DayView?) {
 
         //Parse the date:
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-        val dateString = dateFormat.format(p0?.date)
+        val dateString = dateFormat.format(p0?.date!!)
         val realDate = dateFormat.parse(dateString)
         val color_text = Color.BLACK
 
+        val color = Color.RED
+        p0.setBackgroundColor(color)
+        p0.setTextColor(color_text)
+
         for (element in list){
             if (element.date == realDate){
-                val color = Color.GREEN
-                p0?.setBackgroundColor(color)
-                p0?.setTextColor(color_text)
-            }
-            else{
-                val color = Color.RED
-                p0?.setBackgroundColor(color)
-                p0?.setTextColor(color_text)
+                val newColor = Color.GREEN
+                p0.setBackgroundColor(newColor)
+                p0.setTextColor(color_text)
             }
         }
     }

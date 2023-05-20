@@ -4,10 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.Date
 import kotlin.concurrent.thread
 
@@ -17,8 +13,8 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
     private val repository = ReservationRepository(application)
 
     //All the data from the database:
-    private val mutableAll = MutableLiveData<List<Reservation>>()
-    private val everyData : LiveData<List<Reservation>> get() = mutableAll
+    private val mutableEveryData = MutableLiveData<List<Reservation>>()
+    val everyData: LiveData<List<Reservation>> get() = mutableEveryData
 
     //LiveData for Date and Sport selection:
     private val mutableFilteredList = MutableLiveData<List<Reservation>>()
@@ -34,9 +30,9 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
         }
     }
 
-    fun readAll(){
+    fun getAll(){
         thread {
-            mutableAll.postValue(repository.getAllData())
+            mutableEveryData.postValue(repository.getAllData())
         }
     }
 
@@ -52,26 +48,10 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
         }
     }
 
-    fun updateReservation(reservation: Reservation): Boolean{
-
-        var check = true
-
+    fun updateReservation(reservation: Reservation){
         thread {
-
-            if (everyData.value != null) {
-                for (element in everyData.value!!) {
-                    if (element.date == reservation.date && element.slot == reservation.slot) {
-                        check = false
-                    }
-                }
-            }
-
-            if (check) {
-                repository.updateData(reservation)
-            }
+            repository.updateData(reservation)
         }
-
-        return check
     }
 
     fun deleteReservation(id: Long){

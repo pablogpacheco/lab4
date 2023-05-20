@@ -1,5 +1,6 @@
 package it.polito.mas.lab3.fragments.modify
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,12 +13,10 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.Reservation
-import it.polito.mas.lab3.data.ReservationAdapter
 import it.polito.mas.lab3.data.ReservationViewModel
+import java.text.ParseException
 import java.text.SimpleDateFormat
 
 class ModifyFragment : Fragment() {
@@ -88,10 +87,9 @@ class ModifyFragment : Fragment() {
         return view
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val vm by viewModels<ReservationViewModel>()
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
@@ -104,35 +102,83 @@ class ModifyFragment : Fragment() {
 
         var newSlot = 0
 
-        for ((index, element) in slotsList.withIndex()) {
-            if (element == reservationSlot.text.toString())
-                newSlot = index
-        }
-
         saveChange.setOnClickListener {
 
-            vm.readAll()
+            if (checkDate()) {
 
-            val check = vm.updateReservation(Reservation(myID,
-                reservationUser.text.toString(),
-                reservationSport.text.toString(),
-                dateFormat.parse(reservationDate.text.toString()),
-                newSlot))
-            if (check) {
-                vm.getNameBased(myUsername)
-                vm.getSportBased(dateFormat.parse(reservationDate.text.toString()), reservationSport.text.toString())
-                vm.getSportBased(dateFormat.parse(myDate), mySport)
-                val args = bundleOf(
-                    "my_username" to myUsername,
-                )
-                findNavController().navigate(R.id.action_modifyFragment_to_calendarFragment, args)
-            }
-            else{
-                Toast.makeText(
-                    requireContext(),
-                    "Error. Update stopped because of date/slot conflict.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                var checkValidUpdate = true
+                var checkValidSlot = false
+
+                for ((index, element) in slotsList.withIndex()) {
+                    if (element == reservationSlot.text.toString()) {
+                        newSlot = index + 1
+                        checkValidSlot = true
+                    }
+                }
+
+                if (vm.everyData.value != null) {
+                    for (element in vm.everyData.value!!) {
+                        if (element.date == dateFormat.parse(reservationDate.text.toString()) &&
+                            element.slot == newSlot &&
+                            element.sport_category == reservationSport.text.toString()
+                        ) {
+                            checkValidUpdate = false
+                        }
+                    }
+                }
+
+                if (reservationSport.text.toString() != "Football" &&
+                    reservationSport.text.toString() != "Basketball" &&
+                    reservationSport.text.toString() != "Tennis" &&
+                    reservationSport.text.toString() != "Padel" &&
+                    reservationSport.text.toString() != "Volleyball"
+                ) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Error. Sport not valid.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (!checkValidSlot) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Error. Slot not valid.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (checkValidUpdate) {
+                    vm.updateReservation(
+                        Reservation(
+                            myID,
+                            reservationUser.text.toString(),
+                            reservationSport.text.toString(),
+                            dateFormat.parse(reservationDate.text.toString()),
+                            newSlot
+                        )
+                    )
+                    vm.getNameBased(myUsername)
+                    vm.getSportBased(
+                        dateFormat.parse(reservationDate.text.toString())!!,
+                        reservationSport.text.toString()
+                    )
+                    vm.getSportBased(dateFormat.parse(myDate)!!, mySport)
+                    val args = bundleOf(
+                        "my_username" to myUsername,
+                    )
+                    Toast.makeText(
+                        requireContext(),
+                        "Data updated correctly.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    findNavController().navigate(
+                        R.id.action_modifyFragment_to_calendarFragment,
+                        args
+                    )
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Error. Update stopped because of date/slot conflict.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
@@ -155,6 +201,26 @@ class ModifyFragment : Fragment() {
             )
             findNavController().navigate(R.id.action_modifyFragment_to_calendarFragment, args)
         }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun checkDate() : Boolean{
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        var check = false
+
+        try {
+            dateFormat.parse(reservationDate.text.toString())
+            check = true
+        } catch (pe : ParseException){
+            Toast.makeText(
+                requireContext(),
+                "Error. Invalid Date.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        return check
     }
 
 }

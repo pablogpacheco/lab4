@@ -1,5 +1,6 @@
 package it.polito.mas.lab3.fragments.list
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,13 +12,13 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
-import it.polito.mas.lab3.MainActivity
+import com.stacktips.view.DayDecorator
+import com.stacktips.view.DayView
 import it.polito.mas.lab3.R
+import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationViewModel
-import it.polito.mas.lab3.fragments.add.AddFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,7 +27,12 @@ class ListFragment : Fragment() {
 
     private lateinit var calendarView: CustomCalendarView
     private lateinit var sportSelected : Spinner
-    //private lateinit var currentCalendar: Calendar
+    private lateinit var currentCalendar: Calendar
+    private lateinit var selectedSport: String
+
+    //private var control: Int = 2 //All
+    private val modifyReservationViewModel by viewModels<ReservationViewModel>()
+    private lateinit var reservedDates: List<Reservation>
 
     //The fragment has to return its view tree:
     override fun onCreateView(
@@ -39,50 +45,120 @@ class ListFragment : Fragment() {
 
         sportSelected = view.findViewById(R.id.deporte)
         calendarView = view.findViewById(R.id.calendar_view)
-        //currentCalendar = Calendar.getInstance(Locale.getDefault())
+        currentCalendar = Calendar.getInstance(Locale.getDefault())
+        //val selectedDate = Date(4/5/2023)
+        reservedDates = listOf()
+        selectedSport ="Football" //Default
 
-        /*
+        modifyReservationViewModel.getAll()
+
         // Observar los cambios en el ciclo de vida de la vista
         viewLifecycleOwnerLiveData.observe(viewLifecycleOwner) { lifecycleOwner ->
             // Cuando la vista esté creada
-            lifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
-                @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-                fun onCreate() {
-                    // Obtener los argumentos de navegación
-                    val selectedDateLong = arguments?.getLong("selected_date_res")
-                    val selectedDateColor = arguments?.getInt("selected_date_color")
-                    val selectedDate = selectedDateLong?.let { Date(it) }
-                    val reservedDates = arguments?.getSerializable(ARG_RESERVED_DATES) as? List<Date>
-                    //para todas las fechas de reservedDates agregar un decorator o para cadda selectedDay
+            // Obtener los argumentos de navegación
 
-                    // Si hay una fecha y un color válidos
-                    if (selectedDate != null && selectedDateColor != null) {
+            //val selectedDateLong = arguments?.getLong("selected_date_res")
+            //val selectedDateColor = arguments?.getInt("selected_date_color")
+            //val selectedDate = selectedDateLong?.let { Date(it) }
+            reservedDates = arguments?.getSerializable("reserved_dates") as List<Reservation>
 
-                        val decorators = mutableListOf<DayDecorator>()
-                        // Crear un decorador de día con el color correspondiente
-                        reservedDates?.forEach { date ->
-                            decorators.add(object: DayDecorator {
-                                override fun decorate(view: DayView?) {
-                                if (view?.date == date) {
-                                    view.setBackgroundColor(selectedDateColor)
+            //para todas las fechas de reservedDates agregar un decorator o para cadda selectedDay
+
+            /*
+            modifyReservationViewModel = ViewModelProvider(this,
+                ModifyFragment.ViewModelFactory(
+                    requireActivity().application,
+                    requireContext(),
+                    control,
+                    "user",
+                    selectedDate
+                )
+            ).get(ReservationViewModel::class.java
+             */
+
+            modifyReservationViewModel.everyData.observe(
+                viewLifecycleOwner
+            ) { reservation ->
+                reservedDates = reservation
+                val numSlotsMax = 7
+
+                // Crear un mapa que asocie cada fecha con el número de slots reservados
+                val reservedColor = Color.parseColor("#FFFF00")
+                val allReservedColor = Color.parseColor("#FF0000")
+
+                val decorators = mutableListOf<DayDecorator>()
+                // Si hay una fecha y un color válidos
+
+                // Crear un decorador de día con el color correspondiente
+                decorators.add(object : DayDecorator {
+                    override fun decorate(view: DayView?) {
+                        if (reservedDates.isNotEmpty()) {
+                            for (reservedDate in reservedDates) {
+                                val reservedCalendar = Calendar.getInstance().apply {
+                                    time = reservedDate.date!!
+                                    set(Calendar.HOUR_OF_DAY, 0)
+                                    set(Calendar.MINUTE, 0)
+                                    set(Calendar.SECOND, 0)
+                                    set(Calendar.MILLISECOND, 0)
+                                }
+                                val viewCalendar = Calendar.getInstance().apply {
+                                    time = view?.date!!
+                                    set(Calendar.HOUR_OF_DAY, 0)
+                                    set(Calendar.MINUTE, 0)
+                                    set(Calendar.SECOND, 0)
+                                    set(Calendar.MILLISECOND, 0)
+                                }
+                                val numReservedSlots = getNumReservedSlotsByDateAndSport(
+                                    reservedDates, selectedSport,viewCalendar.time)
+
+                                if (reservedCalendar.compareTo(viewCalendar) == 0 && reservedDate.sport_category == selectedSport ) {
+                                    if (numReservedSlots>=numSlotsMax){
+                                        view?.setBackgroundColor(allReservedColor)
+                                    }else {
+                                        view?.setBackgroundColor(reservedColor)
+                                    }
                                 }
                             }
-                            })
+
+                        }
                     }
 
-                        calendarView.setDecorators(decorators)
-                        calendarView.refreshCalendar(currentCalendar)
 
-                        // Borrar los argumentos de navegación para que no se vuelvan a utilizar
-                        arguments?.remove("selected_date_res")
-                        arguments?.remove("selected_date_color")
-                    }
-                }
-            })
+                })
+
+                calendarView.decorators = decorators
+                calendarView.refreshCalendar(currentCalendar)
+            }
+
+
+            /*GlobalScope.launch {
+            reservedDates =
+                ReservationDatabase.getDatabase(requireContext()).reservationDao()
+                    .getAllReservation()
+
+            }
+
+             */
+
+
+            // Borrar los argumentos de navegación para que no se vuelvan a utilizar
+            arguments?.remove("selected_date_res")
+            arguments?.remove("selected_date_color")
+
+
         }
-         */
 
         return view
+    }
+
+    fun getNumReservedSlotsByDateAndSport(reservedDates: List<Reservation>, sport: String, date: Date): Int {
+        // Obtener todas las reservas para la fecha dada
+        val reservasEnFecha = reservedDates.filter { it.date == date }
+        // Filtrar las reservas según el deporte seleccionado
+        val reservasDelDeporte = reservasEnFecha.filter { it.sport_category == sport }
+        // Contar el número de slots reservados
+        val numSlotsReservados = reservasDelDeporte.count()
+        return numSlotsReservados
     }
 
     //Function to specify action when the view has been created:
@@ -101,6 +177,7 @@ class ListFragment : Fragment() {
 
         //When we press a date, we going to the add reservation fragment:
         calendarView.setCalendarListener(object : CalendarListener {
+            @SuppressLint("SimpleDateFormat")
             override fun onDateSelected(date: Date?) {
 
                 //When we select a sport, we need to save our choice:
