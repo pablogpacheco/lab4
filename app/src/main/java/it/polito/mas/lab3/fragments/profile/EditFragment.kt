@@ -76,9 +76,6 @@ class EditFragment : Fragment() {
             }
         }
 
-        //Saved image
-        loadImageFromStorage()
-
         imageButton = view.findViewById(R.id.imageButton)
         nameField = view.findViewById(R.id.nameField)
         nicknameField = view.findViewById(R.id.nicknameField)
@@ -87,6 +84,23 @@ class EditFragment : Fragment() {
         saveChanges = view.findViewById(R.id.saveChanges)
         frame = view.findViewById(R.id.imageView)
         cancelButton = view.findViewById(R.id.cancelButton)
+
+        //Saved image
+        loadImageFromStorage()
+
+        val sharedPref = activity?.getSharedPreferences("app_pref", Context.MODE_PRIVATE)
+
+        //Check if the precences contain the "profile" key:
+        if (sharedPref?.contains("profile") == true){
+
+            val deserializeString = sharedPref.getString("profile", "")
+            val deserializeJson = JSONObject(deserializeString?:"")
+
+            nameField.setText(deserializeJson.optString("name"))
+            nicknameField.setText(deserializeJson.optString("nickname"))
+            emailField.setText(deserializeJson.optString("email"))
+            phoneNumberField.setText(deserializeJson.optString("phoneNumber"))
+        }
 
         //To open a context menu by clicking on a button, you have to register the button
         registerForContextMenu(imageButton)
@@ -104,7 +118,6 @@ class EditFragment : Fragment() {
 
         saveChanges.setOnClickListener {
 
-            val sharedPref = activity?.getSharedPreferences("app_pref", Context.MODE_PRIVATE)
             val deserializeString = sharedPref?.getString("profile", "")
             val deserializeJson = if (deserializeString != ""){
                 JSONObject(deserializeString!!)
@@ -269,7 +282,6 @@ class EditFragment : Fragment() {
 
     private fun loadImageFromStorage() {
         try {
-
             val cw = ContextWrapper(context?.applicationContext)
             val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
             val f = File(directory, "profile.jpg")
