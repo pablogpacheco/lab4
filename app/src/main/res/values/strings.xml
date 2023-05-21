@@ -12,20 +12,81 @@
 
     <string name="available_presentation">Select a discipline and a date to check for available playgrounds:</string>
 
+    <string name="pref_slot">Favorite Time for a game:</string>
     <string-array name="slots">
-        <item tag="1">1->8:00-10:00</item>
-        <item tag="2">2->10:00-12:00</item>
-        <item tag="3">3->12:00-14:00</item>
-        <item tag="4">4->14:00-16:00</item>
-        <item tag="5">5->16:00-18:00</item>
-        <item tag="6">6->18:00-20:00</item>
-        <item tag="7">7->20:00-22:00</item>
+        <item tag="1">1->8:00-9:00</item>
+        <item tag="2">2->9:00-10:00</item>
+        <item tag="3">3->10:00-11:00</item>
+        <item tag="4">4->11:00-12:00</item>
+        <item tag="5">5->12:00-13:00</item>
+        <item tag="6">6->13:00-14:00</item>
+        <item tag="7">7->14:00-15:00</item>
+        <item tag="8">8->15:00-16:00</item>
+        <item tag="9">9->16:00-17:00</item>
+        <item tag="10">10->17:00-18:00</item>
+        <item tag="11">11->18:00-19:00</item>
+        <item tag="12">12->19:00-20:00</item>
+        <item tag="13">13->20:00-21:00</item>
     </string-array>
 
-    <string name="full_name"> Full name </string>
-    <string name="nickname">Nickname</string>
-    <string name="email">Email</string>
-    <string name="phoneNumber">Phone Number</string>
+    <string name="full_name">Full name:</string>
+    <string name="username">Username:</string>
+
+    <string name="age">Age:</string>
+
+    <string name="gender">Gender:</string>
+    <string name="select_gender">Select your Gender</string>
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>--</item>
+    </string-array>
+
+    <string name="email">Email:</string>
+    <string name="phoneNumber">Phone Number:</string>
+
+    <string name="fav_sport">Favorite Sport:</string>
+
+    <string name="role">Field Role:</string>
+    <string name="select_role">Select your Role (optional)</string>
+    <string-array name="roles">
+        <item>--</item>
+    </string-array>
+
+    <string name="skills">Skill level:</string>
+    <string name="select_skills">Select your level from 1 to 5</string>
+    <string-array name="skills">
+        <item>1° level</item>
+        <item>2° level</item>
+        <item>3° level</item>
+        <item>4° level</item>
+        <item>5° level</item>
+    </string-array>
+
+    <string name="prev_exp">Previous Sport Experiences:</string>
+
+    <string name="city">City:</string>
+    <string name="select_city">Select the City you play in</string>
+    <string-array name="cities">
+        <item>Turin</item>
+        <item>Milan</item>
+        <item>Rome</item>
+        <item>Naples</item>
+        <item>Florence</item>
+    </string-array>
+
+    <string name="pref_day">Favorite Day for a game:</string>
+    <string name="select_day">Select the Day of the Week you prefer:</string>
+    <string-array name="days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
 

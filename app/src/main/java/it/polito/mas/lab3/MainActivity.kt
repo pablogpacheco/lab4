@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private var profile = false
+    private var returnID = R.id.listFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -40,11 +41,12 @@ class MainActivity : AppCompatActivity() {
         return when(item.itemId) {
             R.id.user_menu ->{
                 if (!profile) {
+                    returnID = navController.currentDestination?.id ?: R.id.listFragment
                     navController.navigate(R.id.profileFragment)
                     profile = true
                 }
                 else{
-                    navController.navigate(R.id.listFragment)
+                    navController.navigate(returnID)
                     profile = false
                 }
                 return true

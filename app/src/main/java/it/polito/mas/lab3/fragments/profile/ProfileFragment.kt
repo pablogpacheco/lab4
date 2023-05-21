@@ -22,11 +22,24 @@ import java.io.FileNotFoundException
 class ProfileFragment : Fragment() {
 
     private lateinit var image: ImageView
+
+    private lateinit var userName: TextView
     private lateinit var fullName: TextView
-    private lateinit var nickname: TextView
+    private lateinit var age: TextView
+    private lateinit var gender: TextView
+
     private lateinit var email: TextView
     private lateinit var phoneNumber: TextView
+
     private lateinit var sport: TextView
+    private lateinit var skills: TextView
+    private lateinit var prevExp: TextView
+
+    private lateinit var favCity: TextView
+    private lateinit var favDay: TextView
+    private lateinit var favSlot: TextView
+
+
     private lateinit var editButton: Button
 
     @SuppressLint("SetTextI18n", "MissingInflatedId")
@@ -38,11 +51,22 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        userName = view.findViewById(R.id.username)
         fullName = view.findViewById(R.id.name)
-        nickname = view.findViewById(R.id.nickname)
+        age = view.findViewById(R.id.age)
+        gender = view.findViewById(R.id.gender)
+
         email = view.findViewById(R.id.email)
         phoneNumber= view.findViewById(R.id.phoneNumber)
-        sport= view.findViewById(R.id.favourite_sport)
+
+        sport= view.findViewById(R.id.fav_sport)
+        skills = view.findViewById(R.id.skills)
+        prevExp = view.findViewById(R.id.previous_exp)
+
+        favCity = view.findViewById(R.id.city)
+        favDay = view.findViewById(R.id.day)
+        favSlot = view.findViewById(R.id.timeslot)
+
         image = view.findViewById(R.id.imageView)
         editButton = view.findViewById(R.id.editButton)
 
@@ -51,7 +75,6 @@ class ProfileFragment : Fragment() {
 
         val sharedPref = activity?.getSharedPreferences("app_pref", Context.MODE_PRIVATE)
 
-
         //Check if the precences contain the "profile" key:
         if (sharedPref?.contains("profile") == true){
 
@@ -59,17 +82,37 @@ class ProfileFragment : Fragment() {
             val deserializeJson = JSONObject(deserializeString?:"")
 
             fullName.text = "Full name: ${deserializeJson.optString("name")}"
-            nickname.text = "Nickname: ${deserializeJson.optString("nickname")}"
+            userName.text = "Username: ${deserializeJson.optString("username")}"
+            age.text = "Age: ${deserializeJson.optString("age")}"
+            gender.text = "Gender: ${deserializeJson.optString("gender")}"
+
             email.text = "Email: ${deserializeJson.optString("email")}"
             phoneNumber.text = "Phone number: ${deserializeJson.optString("phoneNumber")}"
+
+            skills.text = "Skills level: ${deserializeJson.optString("skills")}"
             sport.text = "Favourite sport: ${deserializeJson.optString("favourite_sport")}"
+            prevExp.text = "Previous Experience: ${deserializeJson.optString("prev_exp")}"
+
+            favCity.text = "City for playing: ${deserializeJson.optString("fav_city")}"
+            favDay.text = "Favourite day for a game: ${deserializeJson.optString("fav_day")}"
+            favSlot.text = "Favourite hour for a game: ${deserializeJson.optString("fav_slot")}"
         }
         else{
             fullName.text = "Full name: none"
-            nickname.text = "Nickname: none"
+            userName.text = "Username: none"
+            age.text = "Age: none"
+            gender.text = "Gender: none"
+
             email.text = "Email: none"
             phoneNumber.text = "Phone number: none"
+
+            skills.text = "Skills level: none"
             sport.text = "Favourite sport: none"
+            prevExp.text = "Previous Experience: none"
+
+            favCity.text = "City for playing: none"
+            favDay.text = "Favourite day for a game: none"
+            favSlot.text = "Favourite hour for a game: none"
         }
 
         editButton.setOnClickListener {

@@ -1,6 +1,7 @@
 package it.polito.mas.lab3.fragments.my_reservation
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationAdapter
 import it.polito.mas.lab3.data.ReservationViewModel
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -48,8 +50,19 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_calendar, container, false)
 
+        val sharedPref = activity?.getSharedPreferences("app_pref", Context.MODE_PRIVATE)
+
         //Display the user:
-        val myUser = arguments?.getString("my_username") ?: ""
+        val myUser = if (sharedPref?.contains("profile") == true){
+
+            val deserializeString = sharedPref.getString("profile", "")
+            val deserializeJson = JSONObject(deserializeString?:"")
+
+            deserializeJson.optString("username")
+        } else {
+            arguments?.getString("my_username") ?: ""
+        }
+
         displayUser = view.findViewById(R.id.display_user)
         displayUser.text = getString(R.string.display_user, myUser)
 

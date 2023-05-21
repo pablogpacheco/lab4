@@ -38,10 +38,21 @@ import java.io.IOException
 class EditFragment : Fragment() {
 
     private lateinit var nameField: EditText
-    lateinit var nicknameField: EditText
+    private lateinit var usernameField: EditText
+    private lateinit var ageField: EditText
+    private lateinit var genderField: Spinner
+
     lateinit var emailField: EditText
     lateinit var phoneNumberField: EditText
+
     lateinit var sport: Spinner
+    private lateinit var skillsField: Spinner
+    private lateinit var prevExpField: EditText
+
+    private lateinit var favCity: Spinner
+    private lateinit var favDay: Spinner
+    private lateinit var favSlot: Spinner
+
     lateinit var saveChanges: Button
     lateinit var imageButton: ImageButton
     lateinit var cancelButton: Button
@@ -53,7 +64,7 @@ class EditFragment : Fragment() {
     val IMAGE_CAPTURE_CODE = 654
 
 
-    @SuppressLint("ObsoleteSdkInt")
+    @SuppressLint("ObsoleteSdkInt", "MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,11 +90,23 @@ class EditFragment : Fragment() {
         }
 
         imageButton = view.findViewById(R.id.imageButton)
+
         nameField = view.findViewById(R.id.nameField)
-        nicknameField = view.findViewById(R.id.nicknameField)
+        usernameField = view.findViewById(R.id.usernameField)
+        ageField = view.findViewById(R.id.ageField)
+        genderField = view.findViewById(R.id.genderField)
+
         emailField = view.findViewById(R.id.emailField)
         phoneNumberField = view.findViewById(R.id.phoneNumberField)
+
         sport = view.findViewById(R.id.favourite_sport)
+        skillsField = view.findViewById(R.id.skillsField)
+        prevExpField = view.findViewById(R.id.prevExpField)
+
+        favCity = view.findViewById(R.id.cityField)
+        favDay = view.findViewById(R.id.dayField)
+        favSlot = view.findViewById(R.id.slotField)
+
         saveChanges = view.findViewById(R.id.saveChanges)
         frame = view.findViewById(R.id.imageView)
         cancelButton = view.findViewById(R.id.cancelButton)
@@ -100,9 +123,13 @@ class EditFragment : Fragment() {
             val deserializeJson = JSONObject(deserializeString?:"")
 
             nameField.setText(deserializeJson.optString("name"))
-            nicknameField.setText(deserializeJson.optString("nickname"))
+            usernameField.setText(deserializeJson.optString("username"))
+            ageField.setText(deserializeJson.optString("age"))
+
             emailField.setText(deserializeJson.optString("email"))
             phoneNumberField.setText(deserializeJson.optString("phoneNumber"))
+
+            prevExpField.setText(deserializeJson.optString("prev_exp"))
         }
 
         //To open a context menu by clicking on a button, you have to register the button
@@ -134,18 +161,25 @@ class EditFragment : Fragment() {
 
                 //Create the JSON Object:
                 val jsonObj = JSONObject()
+
                 if (nameField.text.isNotBlank()) {
                     jsonObj.put("name", nameField.text.toString())
                 } else {
                     jsonObj.put("name", deserializeJson.optString("name"))
                 }
-
-                if (nicknameField.text.isNotBlank()) {
-                    jsonObj.put("nickname", nicknameField.text.toString())
+                if (usernameField.text.isNotBlank()) {
+                    jsonObj.put("username", usernameField.text.toString())
                 } else {
-                    jsonObj.put("nickname", deserializeJson.optString("nickname"))
+                    jsonObj.put("username", deserializeJson.optString("username"))
 
                 }
+                if (ageField.text.isNotBlank()) {
+                    jsonObj.put("age", ageField.text.toString())
+                } else {
+                    jsonObj.put("age", deserializeJson.optString("age"))
+                }
+                val genderChosen = genderField.selectedItem.toString()
+                jsonObj.put("gender", genderChosen)
 
                 if (emailField.text.isNotBlank()) {
                     jsonObj.put("email", emailField.text.toString())
@@ -153,7 +187,6 @@ class EditFragment : Fragment() {
                     jsonObj.put("email", deserializeJson.optString("email"))
 
                 }
-
                 if (phoneNumberField.text.isNotBlank()) {
                     jsonObj.put("phoneNumber", phoneNumberField.text.toString())
                 } else {
@@ -163,6 +196,20 @@ class EditFragment : Fragment() {
 
                 val sportChosen = sport.selectedItem.toString()
                 jsonObj.put("favourite_sport", sportChosen)
+                val skillChosen = skillsField.selectedItem.toString()
+                jsonObj.put("skills", skillChosen)
+                if (prevExpField.text.isNotBlank()) {
+                    jsonObj.put("prev_exp", prevExpField.text.toString())
+                } else {
+                    jsonObj.put("prev_exp", deserializeJson.optString("prev_exp"))
+                }
+
+                val cityChosen = favCity.selectedItem.toString()
+                jsonObj.put("fav_city", cityChosen)
+                val dayChosen = favDay.selectedItem.toString()
+                jsonObj.put("fav_day", dayChosen)
+                val slotChosen = favSlot.selectedItem.toString()
+                jsonObj.put("fav_slot", slotChosen)
 
                 //Serialize the JSON:
                 val jsonString = jsonObj.toString()

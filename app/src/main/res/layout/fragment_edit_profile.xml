@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,7 +14,6 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="50dp"
@@ -26,60 +24,201 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:src="@drawable/ic_profile" />
 
-        <EditText
-            android:id="@+id/nameField"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:hint="Insert full name"
-            android:inputType="textPersonName"
-            android:textColor="#3F51B5" />
-
-        <EditText
-            android:id="@+id/nicknameField"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:hint="Insert nickname"
-            android:inputType="text"
-            android:textColor="#3F51B5" />
-
-        <EditText
-            android:id="@+id/emailField"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Insert email"
-            android:textColor="#3F51B5" />
-
-        <EditText
-            android:id="@+id/phoneNumberField"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:hint="Insert phone number"
-            android:inputType="phone"
-            android:textColor="#3F51B5" />
-
-        <Spinner
-            android:id="@+id/favourite_sport"
-            android:layout_width="250dp"
-            android:layout_height="45dp"
-            android:entries="@array/sports"
-            android:text="Favourite Sport" />
-
-        <Button
-            android:id="@+id/saveChanges"
+        <ScrollView
+            android:id="@+id/scrollLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SAVE" />
+            tools:ignore="ScrollViewCount">
 
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CANCEL" />
+            <LinearLayout
+                android:layout_marginStart="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/usernameField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:hint="Insert Username for reservations"
+                        android:inputType="text"
+                        android:textColor="#3F51B5" />
+
+                    <TextView
+                        android:text="Personal Info:"
+                        android:textColor="#000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/nameField"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:hint="Insert full name"
+                            android:inputType="textPersonName"
+                            android:textColor="#3F51B5" />
+
+                        <EditText
+                            android:layout_marginStart="16dp"
+                            android:id="@+id/ageField"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:hint="Insert your Age"
+                            android:inputType="numberDecimal"
+                            android:textColor="#3F51B5" />
+
+                    </LinearLayout>
+
+                    <Spinner
+                        android:id="@+id/genderField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:entries="@array/gender" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:text="Contacts:"
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/emailField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:inputType="textEmailAddress"
+                        android:hint="Insert email"
+                        android:textColor="#3F51B5" />
+
+                    <EditText
+                        android:layout_marginStart="16dp"
+                        android:id="@+id/phoneNumberField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:hint="Insert phone number"
+                        android:inputType="phone"
+                        android:textColor="#3F51B5" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:text="As a Player:"
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/favourite_sport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:entries="@array/sports"
+                        android:text="Favourite Sport" />
+
+                    <Spinner
+                        android:id="@+id/skillsField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:entries="@array/skills"
+                        android:text="Skill level" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/prevExpField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:inputType="text"
+                    android:hint="Tells us your previous experience"
+                    android:textColor="#3F51B5" />
+
+                <TextView
+                    android:text="Playgrounds preferences:"
+                    android:textColor="#000000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"/>
+
+                <Spinner
+                    android:id="@+id/cityField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="Insert City you play in"
+                    android:entries="@array/cities" />
+
+                <Spinner
+                    android:id="@+id/dayField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="Insert favorite day to play"
+                    android:entries="@array/days" />
+
+                <Spinner
+                    android:id="@+id/slotField"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="Insert favorite time to play"
+                    android:entries="@array/slots"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/saveChanges"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="SAVE" />
+
+                    <Button
+                        android:id="@+id/cancelButton"
+                        android:layout_marginStart="8dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="CANCEL" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 </ScrollView>
