@@ -22,6 +22,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Spinner
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.navigation.fragment.findNavController
 import it.polito.mas.lab3.R
@@ -40,6 +41,7 @@ class EditFragment : Fragment() {
     lateinit var nicknameField: EditText
     lateinit var emailField: EditText
     lateinit var phoneNumberField: EditText
+    lateinit var sport: Spinner
     lateinit var saveChanges: Button
     lateinit var imageButton: ImageButton
     lateinit var cancelButton: Button
@@ -81,6 +83,7 @@ class EditFragment : Fragment() {
         nicknameField = view.findViewById(R.id.nicknameField)
         emailField = view.findViewById(R.id.emailField)
         phoneNumberField = view.findViewById(R.id.phoneNumberField)
+        sport = view.findViewById(R.id.favourite_sport)
         saveChanges = view.findViewById(R.id.saveChanges)
         frame = view.findViewById(R.id.imageView)
         cancelButton = view.findViewById(R.id.cancelButton)
@@ -157,6 +160,9 @@ class EditFragment : Fragment() {
                     jsonObj.put("phoneNumber", deserializeJson.optString("phoneNumber"))
 
                 }
+
+                val sportChosen = sport.selectedItem.toString()
+                jsonObj.put("favourite_sport", sportChosen)
 
                 //Serialize the JSON:
                 val jsonString = jsonObj.toString()

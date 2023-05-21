@@ -26,6 +26,7 @@ class ProfileFragment : Fragment() {
     private lateinit var nickname: TextView
     private lateinit var email: TextView
     private lateinit var phoneNumber: TextView
+    private lateinit var sport: TextView
     private lateinit var editButton: Button
 
     @SuppressLint("SetTextI18n", "MissingInflatedId")
@@ -41,6 +42,7 @@ class ProfileFragment : Fragment() {
         nickname = view.findViewById(R.id.nickname)
         email = view.findViewById(R.id.email)
         phoneNumber= view.findViewById(R.id.phoneNumber)
+        sport= view.findViewById(R.id.favourite_sport)
         image = view.findViewById(R.id.imageView)
         editButton = view.findViewById(R.id.editButton)
 
@@ -48,6 +50,7 @@ class ProfileFragment : Fragment() {
         loadImageFromStorage()
 
         val sharedPref = activity?.getSharedPreferences("app_pref", Context.MODE_PRIVATE)
+
 
         //Check if the precences contain the "profile" key:
         if (sharedPref?.contains("profile") == true){
@@ -59,12 +62,14 @@ class ProfileFragment : Fragment() {
             nickname.text = "Nickname: ${deserializeJson.optString("nickname")}"
             email.text = "Email: ${deserializeJson.optString("email")}"
             phoneNumber.text = "Phone number: ${deserializeJson.optString("phoneNumber")}"
+            sport.text = "Favourite sport: ${deserializeJson.optString("favourite_sport")}"
         }
         else{
             fullName.text = "Full name: none"
             nickname.text = "Nickname: none"
             email.text = "Email: none"
             phoneNumber.text = "Phone number: none"
+            sport.text = "Favourite sport: none"
         }
 
         editButton.setOnClickListener {

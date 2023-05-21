@@ -71,6 +71,14 @@
             android:text="@string/phoneNumber"
             android:textColor="#3F51B5" />
 
+            <TextView
+                android:id="@+id/favourite_sport"
+                android:layout_width="206dp"
+                android:layout_height="wrap_content"
+
+                android:text="Favourite Sport"
+                android:textColor="#3F51B5" />
+
             <Button
                 android:id="@+id/editButton"
                 android:layout_marginTop="16dp"
