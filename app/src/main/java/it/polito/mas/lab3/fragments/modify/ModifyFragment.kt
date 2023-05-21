@@ -29,6 +29,7 @@ class ModifyFragment : Fragment() {
     private lateinit var reservationSport: EditText
     private lateinit var reservationDate: EditText
     private lateinit var reservationSlot: EditText
+    private lateinit var reservationCourt: EditText
 
     //Buttons:
     private lateinit var saveChange: Button
@@ -50,6 +51,8 @@ class ModifyFragment : Fragment() {
         "20:00-21:00",
     )
 
+    private val courtList = listOf("Court 1", "Court 2", "Court 3", "Court 4")
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,6 +67,7 @@ class ModifyFragment : Fragment() {
         val mySport = arguments?.getString("reservation_sport") ?: ""
         val myDate = arguments?.getString("reservation_date") ?: ""
         val mySlot = arguments?.getInt("reservation_slot") ?: 0
+        val myCourt = arguments?.getString("reservation_court") ?: ""
 
         //Link the views:
         reservationID = view.findViewById(R.id.detail_id)
@@ -71,6 +75,7 @@ class ModifyFragment : Fragment() {
         reservationSport = view.findViewById(R.id.detail_sport)
         reservationDate = view.findViewById(R.id.detail_date)
         reservationSlot = view.findViewById(R.id.detail_slot)
+        reservationCourt = view.findViewById(R.id.detail_court)
 
         //Link the buttons:
         saveChange = view.findViewById(R.id.save_change)
@@ -83,6 +88,7 @@ class ModifyFragment : Fragment() {
         reservationSport.setText(mySport)
         reservationDate.setText(myDate)
         reservationSlot.setText(slotsList[mySlot-1])
+        reservationCourt.setText(myCourt)
 
         return view
     }
@@ -99,6 +105,7 @@ class ModifyFragment : Fragment() {
         val mySport = arguments?.getString("reservation_sport") ?: ""
         val myDate = arguments?.getString("reservation_date") ?: ""
         val mySlot = arguments?.getInt("reservation_slot") ?: 0
+        val myCourt = arguments?.getString("reservation_court") ?: ""
 
         var newSlot = 0
 
@@ -108,11 +115,18 @@ class ModifyFragment : Fragment() {
 
                 var checkValidUpdate = true
                 var checkValidSlot = false
+                var checkValidCourt = false
 
                 for ((index, element) in slotsList.withIndex()) {
                     if (element == reservationSlot.text.toString()) {
                         newSlot = index + 1
                         checkValidSlot = true
+                    }
+                }
+
+                for ((index,element) in courtList.withIndex()) {
+                    if(element == reservationCourt.text.toString()) {
+                        checkValidCourt = true
                     }
                 }
 
@@ -138,7 +152,13 @@ class ModifyFragment : Fragment() {
                         "Error. Sport not valid.",
                         Toast.LENGTH_SHORT
                     ).show()
-                } else if (!checkValidSlot) {
+                } else if (!checkValidCourt) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Error. Court not valid.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }else if (!checkValidSlot) {
                     Toast.makeText(
                         requireContext(),
                         "Error. Slot not valid.",
@@ -151,7 +171,8 @@ class ModifyFragment : Fragment() {
                             reservationUser.text.toString(),
                             reservationSport.text.toString(),
                             dateFormat.parse(reservationDate.text.toString()),
-                            newSlot
+                            newSlot,
+                            reservationCourt.text.toString()
                         )
                     )
                     vm.getNameBased(myUsername)
@@ -190,7 +211,8 @@ class ModifyFragment : Fragment() {
                 "reservation_username" to myUsername,
                 "reservation_sport" to mySport,
                 "reservation_date" to myDate,
-                "reservation_slot" to mySlot
+                "reservation_slot" to mySlot,
+                "reservation_court" to myCourt
             )
             findNavController().navigate(R.id.action_modifyFragment_to_deleteFragment, args)
         }

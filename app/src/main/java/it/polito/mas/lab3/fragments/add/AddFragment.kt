@@ -37,6 +37,7 @@ class AddFragment : Fragment() {
     private lateinit var fechaReserva: TextView
     private lateinit var sport_selected: TextView
     private lateinit var nombreUsuario: EditText
+    private lateinit var court: Spinner
     private lateinit var botonAgregarReserva: Button
     private lateinit var backButton : Button
 
@@ -79,6 +80,9 @@ class AddFragment : Fragment() {
         //A TextView for the date and one for the selected sport:
         fechaReserva = view.findViewById(R.id.fecha_reserva)
         sport_selected = view.findViewById(R.id.sport_selected)
+
+        //Spinner for the court
+        court = view.findViewById(R.id.court)
 
         //Name of the user that wants to reserve the court:
         nombreUsuario = view.findViewById(R.id.nombre_usuario)
@@ -140,18 +144,26 @@ class AddFragment : Fragment() {
 
             // Obtener los valores de los campos del formulario
             val nombre = nombreUsuario.text.toString()
+            val court = court.selectedItem.toString()
 
             //Date
             val dateFormat = SimpleDateFormat("yyyy-MM-dd")
             val selectedDate = dateFormat.parse(selectedDateString)
 
             //Añadir a la bbdd
-            val reserva = Reservation(null, nombre, selectedSportString, selectedDate, selectedItem)
+            val reserva = Reservation(null, nombre, selectedSportString, selectedDate, selectedItem, court)
 
             if (reserva.username == ""){
                 Toast.makeText(
                     requireContext(),
                     "Error. Must Insert a name.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else if(reserva.court == null) {
+                Toast.makeText(
+                    requireContext(),
+                    "Error. Must select a court.",
                     Toast.LENGTH_SHORT
                 ).show()
             }

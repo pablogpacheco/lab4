@@ -13,6 +13,12 @@
     <string name="available_presentation">Select a discipline and a date to check for available playgrounds:</string>
 
     <string name="pref_slot">Favorite Time for a game:</string>
+    <string-array name="courts">
+        <item>Court 1</item>
+        <item>Court 2</item>
+        <item>Court 3</item>
+        <item>Court 4</item>
+    </string-array>
     <string-array name="slots">
         <item tag="1">1->8:00-9:00</item>
         <item tag="2">2->9:00-10:00</item>

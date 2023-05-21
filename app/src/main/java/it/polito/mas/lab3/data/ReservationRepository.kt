@@ -36,7 +36,8 @@ class ReservationRepository(application: Application) {
             reservation.username!!,
             reservation.sport_category!!,
             reservation.date!!,
-            reservation.slot!!
+            reservation.slot!!,
+            reservation.court!!
             )
     }
 }

@@ -47,6 +47,7 @@ class DeleteFragment : Fragment() {
         val mySport = arguments?.getString("reservation_sport") ?: ""
         val myDate = arguments?.getString("reservation_date") ?: ""
         val mySlot = arguments?.getInt("reservation_slot") ?: 0
+        val myCourt = arguments?.getString("reservation_court") ?: ""
 
         officialDelete.setOnClickListener {
             vm.deleteReservation(myID)
@@ -65,7 +66,8 @@ class DeleteFragment : Fragment() {
                 "reservation_username" to myUsername,
                 "reservation_sport" to mySport,
                 "reservation_date" to myDate,
-                "reservation_slot" to mySlot
+                "reservation_slot" to mySlot,
+                "reservation_court" to myCourt
             )
             findNavController().navigate(R.id.action_deleteFragment_to_modifyFragment, args)
         }

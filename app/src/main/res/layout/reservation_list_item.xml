@@ -52,6 +52,19 @@
 
             />
 
+        <TextView
+            android:id="@+id/reservation_court"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:text="court"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+
+            />
+
 
     </LinearLayout>
 

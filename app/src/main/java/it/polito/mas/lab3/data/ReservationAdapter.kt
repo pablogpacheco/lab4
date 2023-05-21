@@ -62,11 +62,13 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
         val reservationDate: TextView = itemView.findViewById(R.id.reservation_date)
         val reservationSport: TextView = itemView.findViewById(R.id.reservation_sport)
         val reservationSlot: TextView = itemView.findViewById(R.id.reservation_slot)
+        val reservationCourt: TextView = itemView.findViewById(R.id.reservation_court)
 
         fun bind(reservation:Reservation){
 
             reservationDate.text=reservation.date.toString()
             reservationSport.text=reservation.sport_category
+            reservationCourt.text=reservation.court
 
             if(reservation.slot == null){
                 reservationSlot.text="null"

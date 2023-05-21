@@ -13,5 +13,6 @@ data class Reservation (
     @ColumnInfo(name = "username") val username: String?,
     @ColumnInfo(name = "sport_category") val sport_category: String?,
     @ColumnInfo(name = "date") @TypeConverters(Converters::class) val date: Date?,
-    @ColumnInfo(name = "slot") val slot: Int?
+    @ColumnInfo(name = "slot") val slot: Int?,
+    @ColumnInfo(name = "court") val court: String?
 )
