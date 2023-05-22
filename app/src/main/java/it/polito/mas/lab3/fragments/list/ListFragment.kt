@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.core.os.bundleOf
@@ -46,9 +47,8 @@ class ListFragment : Fragment() {
         sportSelected = view.findViewById(R.id.deporte)
         calendarView = view.findViewById(R.id.calendar_view)
         currentCalendar = Calendar.getInstance(Locale.getDefault())
-        //val selectedDate = Date(4/5/2023)
         reservedDates = listOf()
-        selectedSport ="Football" //Default
+        selectedSport = "Football" //Default
 
         modifyReservationViewModel.getAll()
 
@@ -57,9 +57,6 @@ class ListFragment : Fragment() {
             // Cuando la vista esté creada
             // Obtener los argumentos de navegación
 
-            //val selectedDateLong = arguments?.getLong("selected_date_res")
-            //val selectedDateColor = arguments?.getInt("selected_date_color")
-            //val selectedDate = selectedDateLong?.let { Date(it) }
             if (arguments?.getSerializable("reserved_dates") != null)
                 reservedDates = arguments?.getSerializable("reserved_dates") as List<Reservation>
 
@@ -110,7 +107,7 @@ class ListFragment : Fragment() {
                                     set(Calendar.MILLISECOND, 0)
                                 }
                                 val numReservedSlots = getNumReservedSlotsByDateAndSport(
-                                    reservedDates, selectedSport,viewCalendar.time)
+                                    reservedDates, selectedSport, viewCalendar.time)
 
                                 if (reservedCalendar.compareTo(viewCalendar) == 0 && reservedDate.sport_category == selectedSport ) {
                                     if (numReservedSlots>=numSlotsMax){
@@ -141,12 +138,6 @@ class ListFragment : Fragment() {
 
              */
 
-
-            // Borrar los argumentos de navegación para que no se vuelvan a utilizar
-            arguments?.remove("selected_date_res")
-            arguments?.remove("selected_date_color")
-
-
         }
 
         return view
@@ -166,15 +157,68 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*
-        sport.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        sportSelected.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 //val sportName = parent.getItemAtPosition(position).toString()
                 selectedSport = parent.getItemAtPosition(position).toString()
+
+                modifyReservationViewModel.everyData.observe(
+                    viewLifecycleOwner
+                ) { reservation ->
+                    reservedDates = reservation
+                    val numSlotsMax = 7
+
+                    // Crear un mapa que asocie cada fecha con el número de slots reservados
+                    val reservedColor = Color.parseColor("#FFFF00")
+                    val allReservedColor = Color.parseColor("#FF0000")
+
+                    val decorators = mutableListOf<DayDecorator>()
+                    // Si hay una fecha y un color válidos
+
+                    // Crear un decorador de día con el color correspondiente
+                    decorators.add(object : DayDecorator {
+                        override fun decorate(view: DayView?) {
+                            if (reservedDates.isNotEmpty()) {
+                                for (reservedDate in reservedDates) {
+                                    val reservedCalendar = Calendar.getInstance().apply {
+                                        time = reservedDate.date!!
+                                        set(Calendar.HOUR_OF_DAY, 0)
+                                        set(Calendar.MINUTE, 0)
+                                        set(Calendar.SECOND, 0)
+                                        set(Calendar.MILLISECOND, 0)
+                                    }
+                                    val viewCalendar = Calendar.getInstance().apply {
+                                        time = view?.date!!
+                                        set(Calendar.HOUR_OF_DAY, 0)
+                                        set(Calendar.MINUTE, 0)
+                                        set(Calendar.SECOND, 0)
+                                        set(Calendar.MILLISECOND, 0)
+                                    }
+                                    val numReservedSlots = getNumReservedSlotsByDateAndSport(
+                                        reservedDates, selectedSport, viewCalendar.time)
+
+                                    if (reservedCalendar.compareTo(viewCalendar) == 0 && reservedDate.sport_category == selectedSport ) {
+                                        if (numReservedSlots>=numSlotsMax){
+                                            view?.setBackgroundColor(allReservedColor)
+                                        }else {
+                                            view?.setBackgroundColor(reservedColor)
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+
+
+                    })
+
+                    calendarView.decorators = decorators
+                    calendarView.refreshCalendar(currentCalendar)
+                }
             }
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
-         */
+
 
         //When we press a date, we going to the add reservation fragment:
         calendarView.setCalendarListener(object : CalendarListener {

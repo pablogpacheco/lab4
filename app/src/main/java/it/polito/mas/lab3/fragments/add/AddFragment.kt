@@ -1,7 +1,6 @@
 package it.polito.mas.lab3.fragments.add
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -199,12 +198,12 @@ class AddFragment : Fragment() {
                 ).show()
 
                 // Calcular el color que quieres asignarle al día correspondiente
-                val color = Color.parseColor("#02FF00")
-                val selectedDateLong= selectedDate!!.time
+                //val color = Color.parseColor("#02FF00")
+                //val selectedDateLong= selectedDate!!.time
 
                 val args = Bundle().apply {
-                    putLong("selected_date_res", selectedDateLong)
-                    putInt("selected_date_color", color)
+                    //putLong("selected_date_res", selectedDateLong)
+                    //putInt("selected_date_color", color)
                     putSerializable("reserved_dates", ArrayList(reservedDates))
                 }
 
