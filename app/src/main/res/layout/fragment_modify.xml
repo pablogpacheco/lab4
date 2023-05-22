@@ -212,15 +212,16 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
-        </ScrollView>
+                <Button
+                    android:id="@+id/backToRes"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Back" />
 
-        <Button
-            android:id="@+id/backToRes"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:text="Back" />
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 

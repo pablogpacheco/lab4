@@ -36,7 +36,10 @@ class ReservationRepository(application: Application) {
             reservation.date!!,
             reservation.slot!!,
             reservation.city!!,
-            reservation.court!!
+            reservation.court!!,
+            reservation.quality_value!!,
+            reservation.service_value!!,
+            reservation.review!!
             )
     }
 }

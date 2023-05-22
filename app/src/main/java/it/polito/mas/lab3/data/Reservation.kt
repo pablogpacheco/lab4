@@ -15,5 +15,8 @@ data class Reservation (
     @ColumnInfo(name = "date") @TypeConverters(Converters::class) val date: Date?,
     @ColumnInfo(name = "slot") val slot: Int?,
     @ColumnInfo(name = "city") val city: String?,
-    @ColumnInfo(name = "court") val court: String?
+    @ColumnInfo(name = "court") val court: String?,
+    @ColumnInfo(name = "quality_value") val quality_value: Int?,
+    @ColumnInfo(name = "service_value") val service_value: Int?,
+    @ColumnInfo(name = "review") val review: String?,
 )

@@ -112,6 +112,9 @@ class ModifyFragment : Fragment() {
         val mySlot = arguments?.getInt("reservation_slot") ?: 0
         val myCity = arguments?.getString("reservation_city") ?: ""
         val myCourt = arguments?.getString("reservation_court") ?: ""
+        val myQuality = arguments?.getInt("reservation_quality") ?: 0
+        val myService = arguments?.getInt("reservation_service") ?: 0
+        val myReview = arguments?.getString("reservation_review") ?: ""
 
         var newSlot = 0
 
@@ -192,7 +195,10 @@ class ModifyFragment : Fragment() {
                             dateFormat.parse(reservationDate.text.toString()),
                             newSlot,
                             reservationCity.text.toString(),
-                            reservationCourt.text.toString()
+                            reservationCourt.text.toString(),
+                            myQuality,
+                            myService,
+                            myReview
                         )
                     )
                     vm.getNameBased(myUsername)
@@ -235,7 +241,10 @@ class ModifyFragment : Fragment() {
                 "reservation_date" to myDate,
                 "reservation_slot" to mySlot,
                 "reservation_city" to myCity,
-                "reservation_court" to myCourt
+                "reservation_court" to myCourt,
+                "reservation_quality" to myQuality,
+                "reservation_service" to myService,
+                "reservation_review" to myReview
             )
             findNavController().navigate(R.id.action_modifyFragment_to_deleteFragment, args)
         }

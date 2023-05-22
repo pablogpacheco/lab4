@@ -29,10 +29,14 @@ interface ReservationDao {
             "date = :date," +
             "slot = :slot, " +
             "city = :city," +
-            "court = :court " +
+            "court = :court, " +
+            "quality_value = :quality_value, " +
+            "service_value = :service_value, " +
+            "review = :review "+
             "WHERE id = :id")
     fun updateReservation(id:Long, username: String, sport_category: String,
-                          date: Date, slot: Int, city: String,court: String)
+                          date: Date, slot: Int, city: String,court: String,
+                          quality_value: Int, service_value: Int, review: String)
 
     //Delete a reservation:
     @Query("DELETE FROM reservation_table WHERE id = :id")

@@ -61,6 +61,10 @@
             android:id="@+id/action_calendarFragment_to_categoryFragment"
             app:destination="@id/categoryFragment"
             app:enterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_calendarFragment_to_rateFragment"
+            app:destination="@id/rateFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
     <fragment
         android:id="@+id/deleteFragment"
@@ -74,6 +78,9 @@
             android:id="@+id/action_deleteFragment_to_calendarFragment"
             app:destination="@id/calendarFragment"
             app:enterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_deleteFragment_to_rateFragment"
+            app:destination="@id/rateFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -94,5 +101,17 @@
             android:id="@+id/action_edit_profileFragment_to_profileFragment2"
             app:destination="@id/profileFragment"
             app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/rateFragment"
+        android:name="it.polito.mas.lab3.fragments.rate.RateFragment"
+        android:label="RateFragment" >
+        <action
+            android:id="@+id/action_rateFragment_to_calendarFragment"
+            app:destination="@id/calendarFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_rateFragment_to_deleteFragment"
+            app:destination="@id/deleteFragment" />
     </fragment>
 </navigation>

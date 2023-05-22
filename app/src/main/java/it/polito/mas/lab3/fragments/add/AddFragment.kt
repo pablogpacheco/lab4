@@ -187,7 +187,10 @@ class AddFragment : Fragment() {
             val selectedDate = dateFormat.parse(selectedDateString)
 
             //Añadir a la bbdd
-            val reserva = Reservation(null, nombre, selectedSportString, selectedDate, selectedItem, cityChosen, court)
+            val reserva = Reservation(null, nombre, selectedSportString,
+                selectedDate, selectedItem, cityChosen, court,
+                0, 0, ""
+            )
 
             if (reserva.username == ""){
                 Toast.makeText(

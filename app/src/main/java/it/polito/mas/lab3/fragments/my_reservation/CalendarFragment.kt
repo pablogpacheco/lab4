@@ -140,7 +140,8 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
     override fun onItemClick(reservation: Reservation) {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
-        //If you click on a reservation, you go in editing the details:
+        val today = Date()
+
         val args = bundleOf(
             "reservation_id" to reservation.id,
             "reservation_username" to reservation.username,
@@ -148,9 +149,23 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
             "reservation_date" to dateFormat.format(reservation.date!!),
             "reservation_slot" to reservation.slot,
             "reservation_city" to reservation.city,
-            "reservation_court" to reservation.court
+            "reservation_court" to reservation.court,
+            "reservation_quality" to reservation.quality_value,
+            "reservation_service" to reservation.service_value,
+            "reservation_review" to reservation.review,
         )
-        findNavController().navigate(R.id.action_calendarFragment_to_modifyFragment, args)
+
+        if (reservation.date.before(today)){
+
+            //If the date of the reservation is not ahead of the actual date, it is not modifiable and we can only rate it:
+            findNavController().navigate(R.id.action_calendarFragment_to_rateFragment, args)
+
+        }
+        else{
+
+            //If the date of the reservation is not previous of the actual date, we can modify it:
+            findNavController().navigate(R.id.action_calendarFragment_to_modifyFragment, args)
+        }
     }
 
 }
@@ -158,6 +173,8 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
 private class ValidDate (val list: List<Reservation>): DayDecorator {
     @SuppressLint("SimpleDateFormat")
     override fun decorate(p0: DayView?) {
+
+        val today = Date()
 
         //Parse the date:
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -171,9 +188,16 @@ private class ValidDate (val list: List<Reservation>): DayDecorator {
 
         for (element in list){
             if (element.date == realDate){
-                val newColor = Color.GREEN
-                p0.setBackgroundColor(newColor)
-                p0.setTextColor(color_text)
+                if (element.date?.before(today) == true){
+                    val newColor = Color.YELLOW
+                    p0.setBackgroundColor(newColor)
+                    p0.setTextColor(color_text)
+                }
+                else {
+                    val newColor = Color.GREEN
+                    p0.setBackgroundColor(newColor)
+                    p0.setTextColor(color_text)
+                }
             }
         }
     }
