@@ -41,7 +41,15 @@ class MainActivity : AppCompatActivity() {
         return when(item.itemId) {
             R.id.user_menu ->{
                 if (!profile) {
-                    returnID = navController.currentDestination?.id ?: R.id.listFragment
+                    returnID = if (navController.currentDestination?.id == R.id.categoryFragment
+                        || navController.currentDestination?.id == R.id.modifyFragment
+                        || navController.currentDestination?.id == R.id.calendarFragment
+                        || navController.currentDestination?.id == R.id.deleteFragment) {
+                        R.id.categoryFragment
+                    } else{
+                        R.id.listFragment
+                    }
+
                     navController.navigate(R.id.profileFragment)
                     profile = true
                 }

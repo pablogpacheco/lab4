@@ -202,7 +202,6 @@ class AddFragment : Fragment() {
                 val color = Color.parseColor("#02FF00")
                 val selectedDateLong= selectedDate!!.time
 
-
                 val args = Bundle().apply {
                     putLong("selected_date_res", selectedDateLong)
                     putInt("selected_date_color", color)
