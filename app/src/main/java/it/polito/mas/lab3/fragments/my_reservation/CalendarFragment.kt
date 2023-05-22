@@ -81,6 +81,7 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
 
         return view
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -146,6 +147,7 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
             "reservation_sport" to reservation.sport_category,
             "reservation_date" to dateFormat.format(reservation.date!!),
             "reservation_slot" to reservation.slot,
+            "reservation_city" to reservation.city,
             "reservation_court" to reservation.court
         )
         findNavController().navigate(R.id.action_calendarFragment_to_modifyFragment, args)

@@ -36,6 +36,7 @@ class AddFragment : Fragment() {
     private lateinit var fechaReserva: TextView
     private lateinit var sport_selected: TextView
     private lateinit var nombreUsuario: EditText
+    private lateinit var city: Spinner
     private lateinit var court: Spinner
     private lateinit var botonAgregarReserva: Button
     private lateinit var backButton : Button
@@ -70,18 +71,22 @@ class AddFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add, container, false)
 
+        //Spinner for the court and the city:
+        city = view.findViewById(R.id.city)
+        court = view.findViewById(R.id.court)
+
+        val cityString = city.selectedItem.toString()
+        val courtString = court.selectedItem.toString()
+
         val selectedDateString = arguments?.getString("selected_date") ?: ""
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         val selectedDate = dateFormat.parse(selectedDateString)
         val selectedSportString = arguments?.getString("chosen_sport") ?: ""
-        vm.getSportBased(selectedDate!!, selectedSportString)
+        vm.getSportBased(selectedDate!!, selectedSportString, cityString, courtString)
 
         //A TextView for the date and one for the selected sport:
         fechaReserva = view.findViewById(R.id.fecha_reserva)
         sport_selected = view.findViewById(R.id.sport_selected)
-
-        //Spinner for the court
-        court = view.findViewById(R.id.court)
 
         //Name of the user that wants to reserve the court:
         nombreUsuario = view.findViewById(R.id.nombre_usuario)
@@ -127,6 +132,37 @@ class AddFragment : Fragment() {
             sport_selected.text = getString(R.string.selected_sport, selectedSportString)
         }
 
+        //Change immediately the slots in case of a change on the city or the court:
+        city.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                val selectedDate = dateFormat.parse(selectedDateString)
+
+                val cityChosen = parent.getItemAtPosition(position).toString()
+                val courtChosen = court.selectedItem.toString()
+
+                vm.getSportBased(selectedDate!!, selectedSportString, cityChosen, courtChosen)
+
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        court.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                val selectedDate = dateFormat.parse(selectedDateString)
+
+                val courtChosen = parent.getItemAtPosition(position).toString()
+                val cityChosen = city.selectedItem.toString()
+
+                vm.getSportBased(selectedDate!!, selectedSportString, cityChosen, courtChosen)
+
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
         //Slot for the RecyclerView: we save the slot id.
         slotAdapter.setOnItemClickListener(object : SlotAdapter.OnItemClickListener {
             override fun onItemClick(slot: Slot) {
@@ -143,6 +179,7 @@ class AddFragment : Fragment() {
 
             // Obtener los valores de los campos del formulario
             val nombre = nombreUsuario.text.toString()
+            val cityChosen = city.selectedItem.toString()
             val court = court.selectedItem.toString()
 
             //Date
@@ -150,12 +187,19 @@ class AddFragment : Fragment() {
             val selectedDate = dateFormat.parse(selectedDateString)
 
             //Añadir a la bbdd
-            val reserva = Reservation(null, nombre, selectedSportString, selectedDate, selectedItem, court)
+            val reserva = Reservation(null, nombre, selectedSportString, selectedDate, selectedItem, cityChosen, court)
 
             if (reserva.username == ""){
                 Toast.makeText(
                     requireContext(),
                     "Error. Must Insert a name.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else if(reserva.city == null) {
+                Toast.makeText(
+                    requireContext(),
+                    "Error. Must select a city.",
                     Toast.LENGTH_SHORT
                 ).show()
             }

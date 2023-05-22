@@ -36,9 +36,9 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
         }
     }
 
-    fun getSportBased(date: Date, sport: String){
+    fun getSportBased(date: Date, sport: String, city: String, court: String){
         thread {
-            mutableFilteredList.postValue(repository.getReservationsByDateAndSport(date, sport))
+            mutableFilteredList.postValue(repository.getReservationsByDateAndSport(date, sport, city, court))
         }
     }
 

@@ -1,7 +1,5 @@
 package it.polito.mas.lab3.data
 
-import android.os.AsyncTask
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import java.util.*
 
@@ -17,8 +15,9 @@ interface ReservationDao {
     fun readAllData(): List<Reservation>
 
     //Get the reservation based on the sport:
-    @Query("SELECT * FROM reservation_table WHERE date = :date AND sport_category = :sport_category")
-    fun getReservationsByDateAndSport(date: Date, sport_category: String): List<Reservation>
+    @Query("SELECT * FROM reservation_table WHERE date = :date AND sport_category = :sport_category" +
+            " AND city = :city AND court = :court")
+    fun getReservationsByDateAndSport(date: Date, sport_category: String, city: String, court: String): List<Reservation>
 
     //Get reservations based on the current user:
     @Query("SELECT * FROM reservation_table WHERE username= :username")
@@ -29,9 +28,11 @@ interface ReservationDao {
             "sport_category = :sport_category," +
             "date = :date," +
             "slot = :slot, " +
+            "city = :city," +
             "court = :court " +
             "WHERE id = :id")
-    fun updateReservation(id:Long, username: String, sport_category: String,date: Date, slot: Int, court: String)
+    fun updateReservation(id:Long, username: String, sport_category: String,
+                          date: Date, slot: Int, city: String,court: String)
 
     //Delete a reservation:
     @Query("DELETE FROM reservation_table WHERE id = :id")

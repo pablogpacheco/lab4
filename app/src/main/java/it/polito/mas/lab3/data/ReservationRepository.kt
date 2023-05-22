@@ -1,8 +1,6 @@
 package it.polito.mas.lab3.data
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import java.util.*
 
 class ReservationRepository(application: Application) {
@@ -19,8 +17,8 @@ class ReservationRepository(application: Application) {
         reservationDao.addReservation(reservation)
     }
 
-    fun getReservationsByDateAndSport(date: Date, sport_category: String) : List<Reservation> {
-         return reservationDao.getReservationsByDateAndSport(date,sport_category)
+    fun getReservationsByDateAndSport(date: Date, sport_category: String, city: String, court: String) : List<Reservation> {
+         return reservationDao.getReservationsByDateAndSport(date,sport_category, city, court)
     }
 
     fun getReservationsByName(username: String) : List<Reservation>{
@@ -37,6 +35,7 @@ class ReservationRepository(application: Application) {
             reservation.sport_category!!,
             reservation.date!!,
             reservation.slot!!,
+            reservation.city!!,
             reservation.court!!
             )
     }

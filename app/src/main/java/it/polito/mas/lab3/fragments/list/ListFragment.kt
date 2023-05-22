@@ -78,7 +78,7 @@ class ListFragment : Fragment() {
                 viewLifecycleOwner
             ) { reservation ->
                 reservedDates = reservation
-                val numSlotsMax = 7
+                val numSlotsMax = 13
 
                 // Crear un mapa que asocie cada fecha con el número de slots reservados
                 val reservedColor = Color.parseColor("#FFFF00")

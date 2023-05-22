@@ -40,13 +40,30 @@
             android:layout_height="60dp"
             android:hint="Name of the user" />
 
-        <Spinner
-            android:id="@+id/court"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries ="@array/courts" />
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/city"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:entries="@array/cities" />
+
+            <Spinner
+                android:id="@+id/court"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:entries="@array/courts" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="8dp"
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

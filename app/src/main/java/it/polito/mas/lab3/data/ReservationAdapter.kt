@@ -1,18 +1,17 @@
 package it.polito.mas.lab3.data
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import it.polito.mas.lab3.R
-import it.polito.mas.lab3.models.Slot
-import it.polito.mas.lab3.models.SlotAdapter
 
 class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder>() {
 
     var reservations: List<Reservation> = emptyList()
-    private var listener: ReservationAdapter.OnItemClickListener? = null
+    private var listener: OnItemClickListener? = null
 
     private val slotsList = listOf("8:00-9:00",
         "9:00-10:00",
@@ -59,15 +58,18 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
 
     inner class ReservationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val reservationDate: TextView = itemView.findViewById(R.id.reservation_date)
+        //val reservationDate: TextView = itemView.findViewById(R.id.reservation_date)
         val reservationSport: TextView = itemView.findViewById(R.id.reservation_sport)
         val reservationSlot: TextView = itemView.findViewById(R.id.reservation_slot)
+        val reservationCity: TextView = itemView.findViewById(R.id.reservation_city)
         val reservationCourt: TextView = itemView.findViewById(R.id.reservation_court)
 
+        @SuppressLint("SetTextI18n")
         fun bind(reservation:Reservation){
 
-            reservationDate.text=reservation.date.toString()
+            //reservationDate.text=reservation.date.toString()
             reservationSport.text=reservation.sport_category
+            reservationCity.text = reservation.city
             reservationCourt.text=reservation.court
 
             if(reservation.slot == null){
