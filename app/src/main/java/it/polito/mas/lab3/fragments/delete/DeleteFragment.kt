@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.ReservationViewModel
 import java.text.SimpleDateFormat
+import java.util.*
 
 class DeleteFragment : Fragment() {
 
@@ -64,20 +65,30 @@ class DeleteFragment : Fragment() {
         }
 
         rollBack.setOnClickListener {
+            val formatter = SimpleDateFormat("yyyy-MM-dd")
+            val dateReser = formatter.parse(myDate)
 
-            val args = bundleOf(
-                "reservation_id" to myID,
-                "reservation_username" to myUsername,
-                "reservation_sport" to mySport,
-                "reservation_date" to myDate,
-                "reservation_slot" to mySlot,
-                "reservation_city" to myCity,
-                "reservation_court" to myCourt,
-                "reservation_quality" to myQuality,
-                "reservation_service" to myService,
-                "reservation_review" to myReview
-            )
-            findNavController().navigate(R.id.action_deleteFragment_to_modifyFragment, args)
+            val today = Date()
+            if (dateReser.before(today)) {
+                val args = bundleOf(
+                    "my_username" to myUsername,
+                )
+                findNavController().navigate(R.id.action_deleteFragment_to_calendarFragment, args)
+            } else {
+                val args = bundleOf(
+                    "reservation_id" to myID,
+                    "reservation_username" to myUsername,
+                    "reservation_sport" to mySport,
+                    "reservation_date" to myDate,
+                    "reservation_slot" to mySlot,
+                    "reservation_city" to myCity,
+                    "reservation_court" to myCourt,
+                    "reservation_quality" to myQuality,
+                    "reservation_service" to myService,
+                    "reservation_review" to myReview
+                )
+                findNavController().navigate(R.id.action_deleteFragment_to_modifyFragment, args)
+            }
         }
     }
 }

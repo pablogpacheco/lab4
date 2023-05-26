@@ -34,6 +34,9 @@ class CategoryFragment : Fragment() {
 
         val sharedPref = activity?.getSharedPreferences("app_pref", Context.MODE_PRIVATE)
 
+        enterButton = view.findViewById(R.id.enter_button)
+        myUsername = view.findViewById(R.id.edit_username)
+
         if (sharedPref?.contains("profile") == true){
 
             val deserializeString = sharedPref.getString("profile", "")
@@ -42,8 +45,6 @@ class CategoryFragment : Fragment() {
             myUsername.setText(deserializeJson.optString("username"))
         }
 
-        enterButton = view.findViewById(R.id.enter_button)
-        myUsername = view.findViewById(R.id.edit_username)
 
         return view
     }
