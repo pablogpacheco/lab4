@@ -11,12 +11,20 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private var profile = false
     private var returnID = R.id.listFragment
+
+    val db = Firebase.firestore
+
+    companion object {
+        const val TAG = "FirestoreApp"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
