@@ -3,6 +3,7 @@ package it.polito.mas.lab3.fragments.profile
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import it.polito.mas.lab3.LoginActivity
 import it.polito.mas.lab3.R
 import org.json.JSONObject
 import java.io.File
@@ -42,6 +45,9 @@ class ProfileFragment : Fragment() {
 
     private lateinit var editButton: Button
 
+    private lateinit var auth : FirebaseAuth
+    private lateinit var logoutButton: Button
+
     @SuppressLint("SetTextI18n", "MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +75,9 @@ class ProfileFragment : Fragment() {
 
         image = view.findViewById(R.id.imageView)
         editButton = view.findViewById(R.id.editButton)
+
+        auth = FirebaseAuth.getInstance()
+        logoutButton = view.findViewById(R.id.signOutBtn)
 
         //Set Image
         loadImageFromStorage()
@@ -117,6 +126,11 @@ class ProfileFragment : Fragment() {
 
         editButton.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment2_to_edit_profileFragment)
+        }
+
+        logoutButton.setOnClickListener{
+            auth.signOut();
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
         }
 
         return view

@@ -12,7 +12,20 @@
           "package_name": "it.polito.mas.lab3"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "403230751594-bcfcn78ie8ej31mp96ia77dcnc58emos.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.polito.mas.lab3",
+            "certificate_hash": "df4e640498f9673c0c5dacf33aa3590dc647b4bb"
+          }
+        },
+        {
+          "client_id": "403230751594-ckki5eactv8eqngmqgnlg8cgop9gr6uq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCEJpZNtw2eyJlUEg5ivM_8KOIgz8t0fD0"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "403230751594-ckki5eactv8eqngmqgnlg8cgop9gr6uq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
