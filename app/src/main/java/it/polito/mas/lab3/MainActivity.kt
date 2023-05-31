@@ -11,19 +11,20 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+//import com.google.firebase.firestore.ktx.firestore
+//import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private var profile = false
     private var returnID = R.id.listFragment
+    private var args: Bundle? = null
 
-    val db = Firebase.firestore
+    //val db = Firebase.firestore
 
     companion object {
-        const val TAG = "FirestoreApp"
+        //const val TAG = "FirestoreApp"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,20 +50,15 @@ class MainActivity : AppCompatActivity() {
         return when(item.itemId) {
             R.id.user_menu ->{
                 if (!profile) {
-                    returnID = if (navController.currentDestination?.id == R.id.categoryFragment
-                        || navController.currentDestination?.id == R.id.modifyFragment
-                        || navController.currentDestination?.id == R.id.calendarFragment
-                        || navController.currentDestination?.id == R.id.deleteFragment) {
-                        R.id.categoryFragment
-                    } else{
-                        R.id.listFragment
-                    }
+
+                    returnID = navController.currentDestination?.id!!
+                    args = supportFragmentManager.fragments.last().childFragmentManager.fragments[0].arguments
 
                     navController.navigate(R.id.profileFragment)
                     profile = true
                 }
                 else{
-                    navController.navigate(returnID)
+                    navController.navigate(returnID, args)
                     profile = false
                 }
                 return true

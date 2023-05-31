@@ -63,6 +63,8 @@ class ModifyFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_modify, container, false)
 
+        vm.getAll()
+
         //Take back your reservation:
         val myID = arguments?.getLong("reservation_id") ?: 0
         val myUsername = arguments?.getString("reservation_username") ?: ""
@@ -150,7 +152,9 @@ class ModifyFragment : Fragment() {
                     for (element in vm.everyData.value!!) {
                         if (element.date == dateFormat.parse(reservationDate.text.toString()) &&
                             element.slot == newSlot &&
-                            element.sport_category == reservationSport.text.toString()
+                            element.sport_category == reservationSport.text.toString() &&
+                            element.city == reservationCity.text.toString() &&
+                            element.court == reservationCourt.text.toString()
                         ) {
                             checkValidUpdate = false
                         }
