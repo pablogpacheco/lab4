@@ -11,8 +11,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
-//import com.google.firebase.firestore.ktx.firestore
-//import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,10 +21,10 @@ class MainActivity : AppCompatActivity() {
     private var returnID = R.id.listFragment
     private var args: Bundle? = null
 
-    //val db = Firebase.firestore
+    val db = Firebase.firestore
 
     companion object {
-        //const val TAG = "FirestoreApp"
+        const val TAG = "FirestoreApp"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
