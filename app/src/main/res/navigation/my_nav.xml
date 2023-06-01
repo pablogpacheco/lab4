@@ -24,7 +24,7 @@
             tools:layout="@layout/fragment_add">
             <action
                 android:id="@+id/action_addFragment_to_listFragment"
-                app:destination="@id/for_list"
+                app:destination="@id/listFragment"
                 app:enterAnim="@android:anim/slide_in_left" />
         </fragment>
     </navigation>
@@ -50,7 +50,8 @@
                 app:enterAnim="@android:anim/slide_in_left" />
             <action
                 android:id="@+id/action_rateFragment_to_deleteFragment"
-                app:destination="@id/deleteFragment" />
+                app:destination="@id/deleteFragment"
+                app:enterAnim="@android:anim/slide_in_left" />
         </fragment>
         <fragment
             android:id="@+id/calendarFragment"
@@ -61,12 +62,12 @@
                 app:destination="@id/modifyFragment"
                 app:enterAnim="@android:anim/slide_in_left" />
             <action
-                android:id="@+id/action_calendarFragment_to_categoryFragment"
-                app:destination="@id/for_my_res"
+                android:id="@+id/action_calendarFragment_to_rateFragment"
+                app:destination="@id/rateFragment"
                 app:enterAnim="@android:anim/slide_in_left" />
             <action
-                android:id="@+id/action_calendarFragment_to_rateFragment"
-                app:destination="@id/for_my_res"
+                android:id="@+id/action_calendarFragment_to_categoryFragment"
+                app:destination="@id/categoryFragment"
                 app:enterAnim="@android:anim/slide_in_left" />
         </fragment>
         <fragment
@@ -75,12 +76,12 @@
             android:label="fragment_modify"
             tools:layout="@layout/fragment_modify">
             <action
-                android:id="@+id/action_modifyFragment_to_calendarFragment"
-                app:destination="@id/for_my_res"
-                app:enterAnim="@android:anim/slide_in_left" />
-            <action
                 android:id="@+id/action_modifyFragment_to_deleteFragment"
                 app:destination="@id/deleteFragment"
+                app:enterAnim="@android:anim/slide_in_left" />
+            <action
+                android:id="@+id/action_modifyFragment_to_calendarFragment"
+                app:destination="@id/calendarFragment"
                 app:enterAnim="@android:anim/slide_in_left" />
         </fragment>
         <fragment
@@ -88,16 +89,17 @@
             android:name="it.polito.mas.lab3.fragments.delete.DeleteFragment"
             android:label="DeleteFragment">
             <action
-                android:id="@+id/action_deleteFragment_to_modifyFragment"
-                app:destination="@id/for_my_res"
+                android:id="@+id/action_deleteFragment_to_rateFragment"
+                app:destination="@id/rateFragment"
                 app:enterAnim="@android:anim/slide_in_left" />
             <action
                 android:id="@+id/action_deleteFragment_to_calendarFragment"
-                app:destination="@id/for_my_res"
+                app:destination="@id/calendarFragment"
                 app:enterAnim="@android:anim/slide_in_left" />
             <action
-                android:id="@+id/action_deleteFragment_to_rateFragment"
-                app:destination="@id/for_my_res" />
+                android:id="@+id/action_deleteFragment_to_modifyFragment"
+                app:destination="@id/modifyFragment"
+                app:enterAnim="@android:anim/slide_in_left" />
         </fragment>
     </navigation>
     <navigation android:id="@+id/my_profile"
@@ -108,7 +110,7 @@
             android:label="fragment_profile"
             tools:layout="@layout/fragment_profile">
             <action
-                android:id="@+id/action_profileFragment2_to_edit_profileFragment"
+                android:id="@+id/action_profileFragment_to_edit_profileFragment"
                 app:destination="@id/edit_profileFragment"
                 app:enterAnim="@android:anim/fade_in" />
         </fragment>
@@ -118,9 +120,9 @@
             android:label="fragment_edit_profile"
             tools:layout="@layout/fragment_edit_profile">
             <action
-                android:id="@+id/action_edit_profileFragment_to_profileFragment2"
-                app:destination="@id/my_profile"
-                app:enterAnim="@android:anim/fade_in" />
+                android:id="@+id/action_edit_profileFragment_to_profileFragment"
+                app:destination="@id/profileFragment"
+                app:enterAnim="@android:anim/slide_in_left" />
         </fragment>
     </navigation>
 </navigation>

@@ -143,7 +143,7 @@ class EditFragment : Fragment() {
         }
 
         cancelButton.setOnClickListener {
-            findNavController().navigate(R.id.action_edit_profileFragment_to_profileFragment2)
+            findNavController().navigate(R.id.action_edit_profileFragment_to_profileFragment)
         }
 
         saveChanges.setOnClickListener {
@@ -227,7 +227,7 @@ class EditFragment : Fragment() {
 
             //val intent = Intent(this, ShowProfileActivity::class.java)
             //intent.putExtras(bundle)
-            findNavController().navigate(R.id.action_edit_profileFragment_to_profileFragment2)
+            findNavController().navigate(R.id.action_edit_profileFragment_to_profileFragment)
 
         }
 
