@@ -3,12 +3,17 @@
 
     <item android:title="Availability"
         android:icon="@drawable/ic_calendar_all"
-        android:id="@+id/listFragment"
+        android:id="@+id/for_list"
         />
 
     <item android:title="My Reservations"
         android:icon="@drawable/ic_sports"
-        android:id="@+id/categoryFragment"
+        android:id="@+id/for_my_res"
+        />
+
+    <item android:title="My Profile"
+        android:id="@id/my_profile"
+        android:visible="false"
         />
 
 </menu>
