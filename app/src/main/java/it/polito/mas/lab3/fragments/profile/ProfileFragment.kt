@@ -125,7 +125,7 @@ class ProfileFragment : Fragment() {
         }
 
         editButton.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment2_to_edit_profileFragment)
+            findNavController().navigate(R.id.action_profileFragment_to_edit_profileFragment)
         }
 
         logoutButton.setOnClickListener{
