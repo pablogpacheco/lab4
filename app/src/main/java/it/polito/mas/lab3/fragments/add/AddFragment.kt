@@ -2,6 +2,7 @@ package it.polito.mas.lab3.fragments.add
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationViewModel
@@ -32,6 +35,11 @@ class AddFragment : Fragment() {
 
     //Let's declare the viewModel:
     private val vm by viewModels<ReservationViewModel>()
+    val db = Firebase.firestore
+    companion object {
+        const val TAG = "FirestoreApp"
+    }
+
 
     private lateinit var fechaReserva: TextView
     private lateinit var sport_selected: TextView
@@ -191,6 +199,14 @@ class AddFragment : Fragment() {
                 selectedDate, selectedItem, cityChosen, court,
                 0, 0, ""
             )
+            val reservation = hashMapOf(
+                "name" to nombre,
+                "selectedSport" to selectedSportString,
+                "selectedDate" to selectedDate,
+                "slot" to selectedItem,
+                "city" to cityChosen,
+                "court" to court
+            )
 
             if (reserva.username == ""){
                 Toast.makeText(
@@ -235,6 +251,12 @@ class AddFragment : Fragment() {
 
                     // Llamar a la función addReservation y pasar la reserva como argumento
                     vm.addReservation(reserva)
+                    // Add to firestore db the reservation
+                    db.collection("reservations")
+                        .add(reservation)
+                        .addOnSuccessListener { documentReference->
+                            Log.d(TAG, "reserva guardada")
+                        }
                 }
 
                 // Mostrar un mensaje de éxito
