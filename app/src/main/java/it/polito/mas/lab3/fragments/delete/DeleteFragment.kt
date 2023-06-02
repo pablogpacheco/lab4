@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import it.polito.mas.lab3.R
+import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -54,8 +55,21 @@ class DeleteFragment : Fragment() {
         val myService = arguments?.getInt("reservation_service") ?: 0
         val myReview = arguments?.getString("reservation_review") ?: ""
 
+        val myReservation = Reservation(
+            myID,
+            myUsername,
+            mySport,
+            dateFormat.parse(myDate)!!,
+            mySlot,
+            myCity,
+            myCourt,
+            myQuality,
+            myService,
+            myReview
+        )
+
         officialDelete.setOnClickListener {
-            vm.deleteReservation(myID)
+            vm.deleteReservation(myReservation)
             vm.getNameBased(myUsername)
             vm.getSportBased(dateFormat.parse(myDate)!!, mySport, myCity, myCourt)
             val args = bundleOf(

@@ -118,6 +118,18 @@ class ModifyFragment : Fragment() {
         val myService = arguments?.getInt("reservation_service") ?: 0
         val myReview = arguments?.getString("reservation_review") ?: ""
 
+        val reservationOld = Reservation(
+            myID,
+            myUsername,
+            mySport,
+            dateFormat.parse(myDate)!!,
+            mySlot,
+            myCity,
+            myCourt,
+            myQuality,
+            myService,
+            myReview
+        )
         var newSlot = 0
 
         saveChange.setOnClickListener {
@@ -191,7 +203,7 @@ class ModifyFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else if (checkValidUpdate) {
-                    vm.updateReservation(
+                    vm.updateReservation(reservationOld,
                         Reservation(
                             myID,
                             reservationUser.text.toString(),

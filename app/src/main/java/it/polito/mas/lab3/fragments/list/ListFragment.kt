@@ -32,7 +32,7 @@ class ListFragment : Fragment() {
     private lateinit var selectedSport: String
 
     //private var control: Int = 2 //All
-    private val modifyReservationViewModel by viewModels<ReservationViewModel>()
+    private val vm by viewModels<ReservationViewModel>()
     private lateinit var reservedDates: List<Reservation>
 
     //The fragment has to return its view tree:
@@ -50,34 +50,15 @@ class ListFragment : Fragment() {
         reservedDates = listOf()
         selectedSport = "Football" //Default
 
-        modifyReservationViewModel.getAll()
+        vm.getAll()
 
         // Observar los cambios en el ciclo de vida de la vista
         viewLifecycleOwnerLiveData.observe(viewLifecycleOwner) { lifecycleOwner ->
-            // Cuando la vista esté creada
-            // Obtener los argumentos de navegación
 
-            if (arguments?.getSerializable("reserved_dates") != null)
-                reservedDates = arguments?.getSerializable("reserved_dates") as List<Reservation>
-
-            //para todas las fechas de reservedDates agregar un decorator o para cadda selectedDay
-
-            /*
-            modifyReservationViewModel = ViewModelProvider(this,
-                ModifyFragment.ViewModelFactory(
-                    requireActivity().application,
-                    requireContext(),
-                    control,
-                    "user",
-                    selectedDate
-                )
-            ).get(ReservationViewModel::class.java
-             */
-
-            modifyReservationViewModel.everyData.observe(
+            vm.everyData.observe(
                 viewLifecycleOwner
-            ) { reservation ->
-                reservedDates = reservation
+            ) { reservations ->
+                reservedDates = reservations
                 val numSlotsMax = 13
 
                 // Crear un mapa que asocie cada fecha con el número de slots reservados
@@ -129,15 +110,6 @@ class ListFragment : Fragment() {
             }
 
 
-            /*GlobalScope.launch {
-            reservedDates =
-                ReservationDatabase.getDatabase(requireContext()).reservationDao()
-                    .getAllReservation()
-
-            }
-
-             */
-
         }
 
         return view
@@ -162,7 +134,7 @@ class ListFragment : Fragment() {
                 //val sportName = parent.getItemAtPosition(position).toString()
                 selectedSport = parent.getItemAtPosition(position).toString()
 
-                modifyReservationViewModel.everyData.observe(
+                vm.everyData.observe(
                     viewLifecycleOwner
                 ) { reservation ->
                     reservedDates = reservation

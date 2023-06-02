@@ -3,6 +3,7 @@ package it.polito.mas.lab3.fragments.my_reservation
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+
 class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
 
     private lateinit var calendarView: CustomCalendarView
@@ -35,6 +37,8 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
     private lateinit var backToUser: Button
     private lateinit var recyclerView : RecyclerView
     private lateinit var reservationAdapter: ReservationAdapter
+    private lateinit var reservedDates: List<Reservation>
+
 
     private val vm by viewModels<ReservationViewModel>()
 
@@ -69,13 +73,17 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
         reservationAdapter.setOnItemClickListener(this)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        vm.filteredByNameData.observe(viewLifecycleOwner){
-            if (it.isNotEmpty()){
-                decorators.add(ValidDate(it))
+        vm.filteredByNameData.observe(
+            viewLifecycleOwner
+        ){ reservations ->
+                reservedDates = reservations
+            if (reservedDates.isNotEmpty()){
+                decorators.add(ValidDate(reservedDates))
                 calendarView.decorators = decorators
                 calendarView.refreshCalendar(currentCalendar)
             }
         }
+
 
         backToUser = view.findViewById(R.id.backToUser)
 
@@ -109,8 +117,7 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
                                 "No reservation present in this date.",
                                 Toast.LENGTH_SHORT
                             ).show()
-                        }
-                        else{
+                        } else{
                             reservationAdapter.setData(actualList)
                             recyclerView.adapter = reservationAdapter
                         }
@@ -187,8 +194,9 @@ private class ValidDate (val list: List<Reservation>): DayDecorator {
         p0.setTextColor(color_text)
 
         for (element in list){
-            if (element.date == realDate){
+            if (element.date  == realDate){
                 if (element.date?.before(today) == true){
+
                     val newColor = Color.YELLOW
                     p0.setBackgroundColor(newColor)
                     p0.setTextColor(color_text)

@@ -40,7 +40,9 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
-            signInGoogle()
+            //signInGoogle()
+            val intent : Intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 

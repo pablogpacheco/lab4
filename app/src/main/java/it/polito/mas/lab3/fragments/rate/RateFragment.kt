@@ -53,6 +53,7 @@ class RateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         //Take back your reservation:
         val myID = arguments?.getLong("reservation_id") ?: 0
         val myUsername = arguments?.getString("reservation_username") ?: ""
@@ -64,6 +65,19 @@ class RateFragment : Fragment() {
         val myQuality = arguments?.getInt("reservation_quality") ?: 0
         val myService = arguments?.getInt("reservation_service") ?: 0
         val myReview = arguments?.getString("reservation_review") ?: ""
+
+        val myReservation = Reservation(
+            myID,
+            myUsername,
+            mySport,
+            dateFormat.parse(myDate)!!,
+            mySlot,
+            myCity,
+            myCourt,
+            myQuality,
+            myService,
+            myReview
+        )
 
         if (myReview != ""){
             review.setText(myReview)
@@ -85,13 +99,12 @@ class RateFragment : Fragment() {
 
         rateButton.setOnClickListener {
 
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
             val qualityValue = qualityBar.progress
             val serviceValue = serviceBar.progress
             val reviews = review.text.toString()
 
-            vm.updateReservation(
+            vm.updateReservation(myReservation,
                 Reservation(
                     myID, myUsername, mySport, dateFormat.parse(myDate), mySlot,
                     myCity, myCourt, qualityValue, serviceValue, reviews

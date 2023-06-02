@@ -2,7 +2,6 @@ package it.polito.mas.lab3.fragments.add
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationViewModel
@@ -35,10 +32,7 @@ class AddFragment : Fragment() {
 
     //Let's declare the viewModel:
     private val vm by viewModels<ReservationViewModel>()
-    val db = Firebase.firestore
-    companion object {
-        const val TAG = "FirestoreApp"
-    }
+
 
 
     private lateinit var fechaReserva: TextView
@@ -68,7 +62,6 @@ class AddFragment : Fragment() {
     private lateinit var slotAdapter: SlotAdapter
     private var selectedItem: Int? = null
 
-    //private lateinit var reservedDates: List<Date>
 
     //Function to display our data:
     @SuppressLint("MissingInflatedId", "FragmentLiveDataObserve", "SimpleDateFormat")
@@ -195,41 +188,35 @@ class AddFragment : Fragment() {
             val selectedDate = dateFormat.parse(selectedDateString)
 
             //Añadir a la bbdd
-            val reserva = Reservation(null, nombre, selectedSportString,
+
+            val reservation = Reservation(null, nombre, selectedSportString,
                 selectedDate, selectedItem, cityChosen, court,
                 0, 0, ""
             )
-            val reservation = hashMapOf(
-                "name" to nombre,
-                "selectedSport" to selectedSportString,
-                "selectedDate" to selectedDate,
-                "slot" to selectedItem,
-                "city" to cityChosen,
-                "court" to court
-            )
 
-            if (reserva.username == ""){
+
+            if (reservation.username == ""){
                 Toast.makeText(
                     requireContext(),
                     "Error. Must Insert a name.",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            else if(reserva.city == null) {
+            else if(reservation.city == null) {
                 Toast.makeText(
                     requireContext(),
                     "Error. Must select a city.",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            else if(reserva.court == null) {
+            else if(reservation.court == null) {
                 Toast.makeText(
                     requireContext(),
                     "Error. Must select a court.",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            else if (reserva.slot == null){
+            else if (reservation.slot == null){
                 Toast.makeText(
                     requireContext(),
                     "Error. Must Select a slot.",
@@ -237,7 +224,7 @@ class AddFragment : Fragment() {
                 ).show()
             }
             else if (vm.filteredData.value?.any{
-                    it.slot == reserva.slot
+                    it.slot == reservation.slot
                 } == true){
                 Toast.makeText(
                     requireContext(),
@@ -250,13 +237,8 @@ class AddFragment : Fragment() {
                 lifecycleScope.launch {
 
                     // Llamar a la función addReservation y pasar la reserva como argumento
-                    vm.addReservation(reserva)
-                    // Add to firestore db the reservation
-                    db.collection("reservations")
-                        .add(reservation)
-                        .addOnSuccessListener { documentReference->
-                            Log.d(TAG, "reserva guardada")
-                        }
+                    vm.addReservation(reservation)
+
                 }
 
                 // Mostrar un mensaje de éxito
@@ -266,9 +248,6 @@ class AddFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
 
-                // Calcular el color que quieres asignarle al día correspondiente
-                //val color = Color.parseColor("#02FF00")
-                //val selectedDateLong= selectedDate!!.time
 
                 val args = Bundle().apply {
                     //putLong("selected_date_res", selectedDateLong)
