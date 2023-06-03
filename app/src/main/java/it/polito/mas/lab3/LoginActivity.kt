@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -18,6 +19,9 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import it.polito.mas.lab3.MainActivity.Companion.TAG
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,12 +32,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        auth = FirebaseAuth.getInstance()
+        auth = Firebase.auth//FirebaseAuth.getInstance()
 
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("403230751594-ckki5eactv8eqngmqgnlg8cgop9gr6uq.apps.googleusercontent.com")
-                //it should be
+            //it should be
             .requestEmail()
             .build()
 
@@ -51,11 +55,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        result ->
-                if(result.resultCode == Activity.RESULT_OK) {
-                    val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                    handleResults(task)
-                }
+            result ->
+        Log.d(TAG,"RESULOUT=====================================================>")
+        if(result.resultCode == Activity.RESULT_OK) {
+            Log.d(TAG,"RESULin=====================================================>")
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            handleResults(task)
+        }
     }
 
     private fun handleResults(task: Task<GoogleSignInAccount>) {
@@ -73,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener {
             if(it.isSuccessful){
-                val intent : Intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }else{
                 Toast.makeText(this, it.exception.toString() , Toast.LENGTH_SHORT).show()
