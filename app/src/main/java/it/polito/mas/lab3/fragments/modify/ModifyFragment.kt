@@ -203,8 +203,8 @@ class ModifyFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else if (checkValidUpdate) {
-                    vm.updateReservation(reservationOld,
-                        Reservation(
+                    vm.deleteReservation(reservationOld)
+                    vm.addReservation(Reservation(
                             myID,
                             reservationUser.text.toString(),
                             reservationSport.text.toString(),
