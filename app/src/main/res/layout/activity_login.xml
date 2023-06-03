@@ -7,6 +7,7 @@
     android:background="@color/teal_700"
     tools:context=".LoginActivity">
 
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/gSignInBtn"
         android:layout_width="match_parent"
@@ -39,12 +40,35 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/google" />
 
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="20dp" />
+
+    <EditText
+        android:id="@+id/usernameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:inputType="text"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/saveButton"
+        app:layout_constraintEnd_toEndOf="@+id/saveButton"
+        app:layout_constraintStart_toStartOf="@+id/saveButton"
+        app:layout_constraintTop_toTopOf="@+id/saveButton" />
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Save"
+        app:layout_constraintEnd_toEndOf="@id/usernameEditText"
+        app:layout_constraintStart_toStartOf="@id/usernameEditText"
+        app:layout_constraintTop_toBottomOf="@id/usernameEditText"
+        android:visibility="invisible"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
