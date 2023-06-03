@@ -89,14 +89,7 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
         myUser = vmU.username.value!!
 
          */
-/*
-        displayUser = view.findViewById(R.id.display_user)
-        displayUser.text = getString(R.string.display_user, myUser)
 
-        //Call the function to update the LiveData in the viewModel:
-        vm.getNameBased(myUser)
-
- */
 
         //Set the calendar and color the days where there's a reservation:
         val decorators : MutableList<DayDecorator> = mutableListOf()
