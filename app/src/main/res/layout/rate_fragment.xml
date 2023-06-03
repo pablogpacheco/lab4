@@ -26,13 +26,16 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"/>
 
-        <SeekBar
-            android:id="@+id/seekBar"
-            style="@style/Widget.AppCompat.SeekBar.Discrete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="5"
-            android:progress="1"/>
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="@style/Widget.AppCompat.RatingBar"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="false"
+        android:numStars="5"
+
+        android:stepSize="1"/>
 
     <TextView
         android:text="Quality of the Service (equipment, faculty, ecc.):"
@@ -43,13 +46,16 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"/>
 
-        <SeekBar
-            android:id="@+id/seekBar2"
-            style="@style/Widget.AppCompat.SeekBar.Discrete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="5"
-            android:progress="1"/>
+    <RatingBar
+        android:id="@+id/ratingBar2"
+        style="@style/Widget.AppCompat.RatingBar"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="false"
+        android:numStars="5"
+
+        android:stepSize="1"/>
 
     <TextView
         android:text="Leave a review:"
