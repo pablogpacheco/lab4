@@ -15,6 +15,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import it.polito.mas.lab3.LoginActivity
 import it.polito.mas.lab3.R
 import org.json.JSONObject
@@ -129,7 +131,7 @@ class ProfileFragment : Fragment() {
         }
 
         logoutButton.setOnClickListener{
-            auth.signOut();
+            Firebase.auth.signOut();
             startActivity(Intent(requireContext(), LoginActivity::class.java))
         }
 
