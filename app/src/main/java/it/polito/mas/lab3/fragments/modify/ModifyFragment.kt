@@ -2,12 +2,14 @@ package it.polito.mas.lab3.fragments.modify
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Selection.setSelection
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
@@ -26,11 +28,11 @@ class ModifyFragment : Fragment() {
     //Variable for our EditText:
     private lateinit var reservationID : TextView
     private lateinit var reservationUser: EditText
-    private lateinit var reservationSport: EditText
+    private lateinit var reservationSport: Spinner
     private lateinit var reservationDate: EditText
-    private lateinit var reservationSlot: EditText
-    private lateinit var reservationCity: EditText
-    private lateinit var reservationCourt: EditText
+    private lateinit var reservationSlot: Spinner
+    private lateinit var reservationCity: Spinner
+    private lateinit var reservationCourt: Spinner
 
     //Buttons:
     private lateinit var saveChange: Button
@@ -54,6 +56,7 @@ class ModifyFragment : Fragment() {
 
     private val courtList = listOf("Court 1", "Court 2", "Court 3", "Court 4")
     private val cityList = listOf("Turin", "Milan", "Rome", "Naples", "Florence")
+    private val sportList=listOf("Football", "Basketball", "Tennis", "Volleyball", "Padel")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,11 +94,10 @@ class ModifyFragment : Fragment() {
         //Change the appearance of the views:
         reservationID.text = myID.toString()
         reservationUser.setText(myUsername)
-        reservationSport.setText(mySport)
+       // reservationSport.(mySport)
         reservationDate.setText(myDate)
-        reservationSlot.setText(slotsList[mySlot-1])
-        reservationCity.setText(myCity)
-        reservationCourt.setText(myCourt)
+       // reservationSlot.setText(slotsList[mySlot-1])
+//        reservationCourt.setText(myCourt)
 
         return view
     }
@@ -118,6 +120,18 @@ class ModifyFragment : Fragment() {
         val myService = arguments?.getInt("reservation_service") ?: 0
         val myReview = arguments?.getString("reservation_review") ?: ""
 
+        //look for the position in the spinner of the previous selection,
+        //this way you can display the previous selected option on the spinner
+        val courtPosition=courtList.indexOf(myCourt)
+        val cityPosition=cityList.indexOf(myCity)
+        val sportPosition=sportList.indexOf(mySport)
+
+        //displaying on the spinner the previous selection of the user
+        reservationSlot.setSelection(mySlot-1)
+        reservationCity.setSelection(cityPosition)
+        reservationCourt.setSelection(courtPosition)
+        reservationSport.setSelection(sportPosition)
+
         val reservationOld = Reservation(
             myID,
             myUsername,
@@ -130,32 +144,36 @@ class ModifyFragment : Fragment() {
             myService,
             myReview
         )
-        var newSlot = 0
+       // var newSlot = reservationSlot.selectedItemPosition + 1
 
         saveChange.setOnClickListener {
+            val selectedSlotPosition = reservationSlot.selectedItemPosition
+            val selectedCourtPosition = reservationCourt.selectedItemPosition
 
             if (checkDate()) {
 
                 var checkValidUpdate = true
-                var checkValidSlot = false
+                var checkValidSlot = true
                 var checkValidCity = false
                 var checkValidCourt = false
 
-                for ((index, element) in slotsList.withIndex()) {
-                    if (element == reservationSlot.text.toString()) {
+               /* for ((index, element) in slotsList.withIndex()) {
+                    if (element == reservationSlot.selectedItem.toString()) {
                         newSlot = index + 1
                         checkValidSlot = true
+
                     }
-                }
+                }*/
+
 
                 for (element in courtList) {
-                    if(element == reservationCourt.text.toString()) {
+                    if(element == reservationCourt.selectedItem.toString()) {
                         checkValidCourt = true
                     }
                 }
 
                 for (element in cityList){
-                    if (element == reservationCity.text.toString()){
+                    if (element == reservationCity.selectedItem.toString()){
                         checkValidCity = true
                     }
                 }
@@ -163,21 +181,22 @@ class ModifyFragment : Fragment() {
                 if (vm.everyData.value != null) {
                     for (element in vm.everyData.value!!) {
                         if (element.date == dateFormat.parse(reservationDate.text.toString()) &&
-                            element.slot == newSlot &&
-                            element.sport_category == reservationSport.text.toString() &&
-                            element.city == reservationCity.text.toString() &&
-                            element.court == reservationCourt.text.toString()
+                            element.slot == selectedSlotPosition &&
+                            element.sport_category == reservationSport.selectedItem.toString() &&
+                            element.city == reservationCity.selectedItem.toString() &&
+                            element.court == reservationCourt.selectedItem.toString()
+
                         ) {
                             checkValidUpdate = false
                         }
                     }
                 }
 
-                if (reservationSport.text.toString() != "Football" &&
-                    reservationSport.text.toString() != "Basketball" &&
-                    reservationSport.text.toString() != "Tennis" &&
-                    reservationSport.text.toString() != "Padel" &&
-                    reservationSport.text.toString() != "Volleyball"
+                if (reservationSport.selectedItem.toString() != "Football" &&
+                    reservationSport.selectedItem.toString() != "Basketball" &&
+                    reservationSport.selectedItem.toString() != "Tennis" &&
+                    reservationSport.selectedItem.toString() != "Padel" &&
+                    reservationSport.selectedItem.toString() != "Volleyball"
                 ) {
                     Toast.makeText(
                         requireContext(),
@@ -204,14 +223,14 @@ class ModifyFragment : Fragment() {
                     ).show()
                 } else if (checkValidUpdate) {
                     vm.deleteReservation(reservationOld)
-                    vm.addReservation(Reservation(
+                    vm.addReservation( Reservation(
                             myID,
                             reservationUser.text.toString(),
-                            reservationSport.text.toString(),
+                            reservationSport.selectedItem.toString(),
                             dateFormat.parse(reservationDate.text.toString()),
-                            newSlot,
-                            reservationCity.text.toString(),
-                            reservationCourt.text.toString(),
+                            selectedSlotPosition + 1,
+                            reservationCity.selectedItem.toString(),
+                            courtList[selectedCourtPosition],
                             myQuality,
                             myService,
                             myReview
@@ -220,9 +239,9 @@ class ModifyFragment : Fragment() {
                     vm.getNameBased(myUsername)
                     vm.getSportBased(
                         dateFormat.parse(reservationDate.text.toString())!!,
-                        reservationSport.text.toString(),
-                        reservationCity.text.toString(),
-                        reservationCourt.text.toString()
+                        reservationSport.selectedItem.toString(),
+                        reservationCity.selectedItem.toString(),
+                        reservationCourt.selectedItem.toString()
                     )
                     //vm.getSportBased(dateFormat.parse(myDate)!!, mySport)
                     val args = bundleOf(

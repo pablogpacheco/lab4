@@ -91,12 +91,14 @@
                         android:text="Sport Chosen for the reservation:"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/detail_sport"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_marginTop="5dp"
-                        android:hint="SPORT CHOSEN" />
+                        android:layout_weight="1"
+                        android:entries="@array/sports" />
+
 
                 </LinearLayout>
 
@@ -119,6 +121,8 @@
                         android:layout_marginTop="5dp"
                         android:hint="DATE OF RESERVATION" />
 
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -133,13 +137,15 @@
                         android:text="Court Chosen for the reservation:"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-                    <EditText
+
+                    <Spinner
                         android:id="@+id/detail_court"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_marginTop="5dp"
-                        android:hint="COURT OF RESERVATION"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:layout_weight="1"
+                        android:entries="@array/courts" />
+
 
                 </LinearLayout>
 
@@ -155,13 +161,14 @@
                         android:text="City Chosen for the reservation:"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/detail_city"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_marginTop="5dp"
-                        android:hint="CITY OF RESERVATION"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:layout_weight="1"
+                        android:entries="@array/cities" />
+
 
                 </LinearLayout>
 
@@ -177,13 +184,13 @@
                         android:text="Slot Chosen for the reservation:"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/detail_slot"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_marginTop="5dp"
-                        android:hint="SLOT OF RESERVATION"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:layout_weight="1"
+                        android:entries="@array/slots" />
 
                 </LinearLayout>
 
