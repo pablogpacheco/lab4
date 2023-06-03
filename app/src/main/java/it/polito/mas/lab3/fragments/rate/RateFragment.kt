@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RatingBar
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.os.bundleOf
@@ -19,37 +20,71 @@ import it.polito.mas.lab3.data.ReservationViewModel
 import java.text.SimpleDateFormat
 
 class RateFragment : Fragment() {
-
-    private lateinit var qualityBar: SeekBar
-    private lateinit var serviceBar: SeekBar
-
+    //variable
+    private lateinit var qualityBar: RatingBar
+    private lateinit var serviceBar: RatingBar
     private lateinit var review: EditText
 
+    //buttons
     private lateinit var rateButton: Button
     private lateinit var deleteButton: Button
     private lateinit var backButton: Button
+    //private  var qualityValue: Int = 0
+    //private  var serviceValue: Int = 0
 
     private val vm by viewModels<ReservationViewModel>()
 
-   @SuppressLint("MissingInflatedId")
+
    override fun onCreateView(inflater: LayoutInflater,
                              container: ViewGroup?,
                              savedInstanceState: Bundle?): View? {
 
        val view = inflater.inflate(R.layout.rate_fragment, container, false)
 
-       qualityBar = view.findViewById(R.id.seekBar)
-       serviceBar = view.findViewById(R.id.seekBar2)
+       vm.getAll()
 
-       review = view.findViewById(R.id.review)
 
+       //Take back the values of your reservation:
+
+       val myQuality = arguments?.getInt("reservation_quality") ?: 0
+       val myService = arguments?.getInt("reservation_service") ?: 0
+       val myReview = arguments?.getString("reservation_review") ?: ""
+
+       qualityBar = view.findViewById(R.id.ratingBar)
+       serviceBar = view.findViewById(R.id.ratingBar2)
        rateButton = view.findViewById(R.id.rate_ok)
        deleteButton = view.findViewById(R.id.rate_delete)
        backButton = view.findViewById(R.id.rate_back)
 
+
+       qualityBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
+           Toast.makeText(requireContext(), "Calification: $rating", Toast.LENGTH_SHORT).show()
+       }
+       serviceBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { ratingBar, rating, fromUser ->
+           Toast.makeText(requireContext(), "Calification: $rating", Toast.LENGTH_SHORT).show()
+       }
+
+
+
+       review = view.findViewById(R.id.review)
+       if (myReview != ""){
+           review.setText(myReview)
+       }
+       if (myQuality != 0){
+           qualityBar.rating = myQuality.toFloat()
+       }
+       if (myService != 0){
+           serviceBar.rating = myService.toFloat()
+       }
+
+
+
+
+
        return view
    }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -66,6 +101,7 @@ class RateFragment : Fragment() {
         val myService = arguments?.getInt("reservation_service") ?: 0
         val myReview = arguments?.getString("reservation_review") ?: ""
 
+
         val myReservation = Reservation(
             myID,
             myUsername,
@@ -79,15 +115,7 @@ class RateFragment : Fragment() {
             myReview
         )
 
-        if (myReview != ""){
-            review.setText(myReview)
-        }
-        if (myQuality != 0){
-            qualityBar.progress = myQuality
-        }
-        if (myService != 0){
-            serviceBar.progress = myService
-        }
+
 
         backButton.setOnClickListener {
 
@@ -97,19 +125,21 @@ class RateFragment : Fragment() {
             findNavController().navigate(R.id.action_rateFragment_to_calendarFragment, args)
         }
 
+
         rateButton.setOnClickListener {
 
 
-            val qualityValue = qualityBar.progress
-            val serviceValue = serviceBar.progress
+            val qualityValue = qualityBar.rating.toInt()
+            val serviceValue = serviceBar.rating.toInt()
             val reviews = review.text.toString()
 
-            vm.updateReservation(myReservation,
-                Reservation(
-                    myID, myUsername, mySport, dateFormat.parse(myDate), mySlot,
-                    myCity, myCourt, qualityValue, serviceValue, reviews
-                )
-            )
+            vm.deleteReservation(myReservation)
+            vm.addReservation(Reservation(
+                myID, myUsername, mySport, dateFormat.parse(myDate), mySlot,
+                myCity, myCourt, qualityValue, serviceValue, reviews
+            ))
+
+
             vm.getNameBased(myUsername)
             vm.getSportBased(
                 dateFormat.parse(myDate)!!,
@@ -127,7 +157,7 @@ class RateFragment : Fragment() {
             ).show()
             findNavController().navigate(
                 R.id.action_rateFragment_to_calendarFragment,
-                args
+                 args
             )
         }
 

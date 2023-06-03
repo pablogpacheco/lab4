@@ -44,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
             signInGoogle()
 
+
         }
     }
 
