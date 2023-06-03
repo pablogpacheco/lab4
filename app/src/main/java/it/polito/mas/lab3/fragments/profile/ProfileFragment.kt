@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import it.polito.mas.lab3.EditProfileActivity
 import it.polito.mas.lab3.LoginActivity
 import it.polito.mas.lab3.R
 import org.json.JSONObject
@@ -127,7 +128,9 @@ class ProfileFragment : Fragment() {
         }
 
         editButton.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_edit_profileFragment)
+            //findNavController().navigate(R.id.action_profileFragment_to_edit_profileFragment)
+            startActivity(Intent(requireContext(), EditProfileActivity::class.java))
+
         }
 
         logoutButton.setOnClickListener{
@@ -146,6 +149,7 @@ class ProfileFragment : Fragment() {
             val f = File(directory, "profile.jpg")
             val b = BitmapFactory.decodeStream(FileInputStream(f))
             image.setImageBitmap(b)
+
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         }

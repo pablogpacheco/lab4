@@ -63,7 +63,7 @@ class CategoryFragment : Fragment() {
                     "my_username" to userString,
                 )
 
-                findNavController().navigate(R.id.action_categoryFragment_to_calendarFragment, args)
+              //  findNavController().navigate(R.id.action_categoryFragment_to_calendarFragment, args)
             }
             else{
                 Toast.makeText( requireContext(),

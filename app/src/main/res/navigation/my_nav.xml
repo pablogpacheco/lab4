@@ -29,17 +29,7 @@
         </fragment>
     </navigation>
     <navigation android:id="@+id/for_my_res"
-        app:startDestination="@id/categoryFragment">
-        <fragment
-            android:id="@+id/categoryFragment"
-            android:name="it.polito.mas.lab3.fragments.category.CategoryFragment"
-            android:label="fragment_category"
-            tools:layout="@layout/fragment_category">
-            <action
-                android:id="@+id/action_categoryFragment_to_calendarFragment"
-                app:destination="@id/calendarFragment"
-                app:enterAnim="@android:anim/slide_in_left" />
-        </fragment>
+        app:startDestination="@id/calendarFragment">
         <fragment
             android:id="@+id/rateFragment"
             android:name="it.polito.mas.lab3.fragments.rate.RateFragment"
@@ -65,10 +55,7 @@
                 android:id="@+id/action_calendarFragment_to_rateFragment"
                 app:destination="@id/rateFragment"
                 app:enterAnim="@android:anim/slide_in_left" />
-            <action
-                android:id="@+id/action_calendarFragment_to_categoryFragment"
-                app:destination="@id/categoryFragment"
-                app:enterAnim="@android:anim/slide_in_left" />
+
         </fragment>
         <fragment
             android:id="@+id/modifyFragment"

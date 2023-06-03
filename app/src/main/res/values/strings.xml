@@ -102,6 +102,7 @@
 
     <string name="fecha_reserva">Selected Date: %1$s</string>
     <string name="selected_sport">Selected Sport: %1$s</string>
+    <string name="nomUs">Username: %1$s</string>
     <string name="display_user">Select a Reservation to see the details, %1$s!</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>

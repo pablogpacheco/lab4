@@ -12,6 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.registerForActivityResult
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -26,6 +28,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import it.polito.mas.lab3.data.ReservationViewModel
+import it.polito.mas.lab3.data.user.UserViewModel
+import androidx.fragment.app.viewModels
+import com.google.android.gms.tasks.Tasks
 
 
 class LoginActivity : AppCompatActivity() {
@@ -37,22 +42,23 @@ class LoginActivity : AppCompatActivity() {
     //Firestore db
     val db = Firebase.firestore
 
-
     companion object {
         const val TAG = "FirestoreApp"
     }
+
+    private val vm by viewModels<UserViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        auth = Firebase.auth//FirebaseAuth.getInstance()
+        auth = Firebase.auth
 
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            //.requestIdToken(getString(R.string.default_web_client_id))
-            .requestIdToken("403230751594-ckki5eactv8eqngmqgnlg8cgop9gr6uq.apps.googleusercontent.com")
+            .requestIdToken(getString(R.string.default_web_client_id))
+            //.requestIdToken("403230751594-ckki5eactv8eqngmqgnlg8cgop9gr6uq.apps.googleusercontent.com")
             //it should be
             .requestEmail()
             .build()
@@ -70,12 +76,13 @@ class LoginActivity : AppCompatActivity() {
         launcher.launch(signInIntent)
     }
 
-    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            handleResults(task)
+    private val launcher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                handleResults(task)
+            }
         }
-    }
 
     private fun handleResults(task: Task<GoogleSignInAccount>) {
         if (task.isSuccessful) {
@@ -89,8 +96,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateUI(account: GoogleSignInAccount) {
-        email=account.email.toString()
-        saveEmail(email)
+        email = account.email.toString()
+        vm.saveEmail(email)
 
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener { task ->
@@ -98,11 +105,13 @@ class LoginActivity : AppCompatActivity() {
                 val currentUser = auth.currentUser
                 if (currentUser != null) {
                     db.collection("users")
-                        .whereEqualTo("email", account.email.toString())
+                        .whereEqualTo("email", email)
                         .get()
                         .addOnSuccessListener { querySnapshot ->
                             for (document in querySnapshot) {
                                 if (document.contains("username")) {
+
+
                                     // El usuario ya tiene un nombre de usuario guardado, ir directamente a MainActivity
                                     val intent = Intent(this, MainActivity::class.java)
                                     startActivity(intent)
@@ -118,9 +127,9 @@ class LoginActivity : AppCompatActivity() {
                                     saveButton.setOnClickListener {
                                         val username = usernameEditText.text.toString()
                                         if (username.isNotEmpty()) {
-                                            checkUsernameAvailability(username) { isAvailable ->
+                                            vm.checkUsernameAvailability(username) { isAvailable ->
                                                 if (isAvailable) {
-                                                    saveUsernameToFirebase(username)
+                                                    vm.saveUsernameToFirebase(username, email)
                                                     val intent =
                                                         Intent(this, MainActivity::class.java)
                                                     startActivity(intent)
@@ -144,78 +153,9 @@ class LoginActivity : AppCompatActivity() {
 
                             }
                         }
-                } else {
-                    Log.d(
-                        TAG,
-                        "No hay current user ======================================================================"
-                    )
-                    // Manejo del error
                 }
             }
+
         }
     }
-
-
-    private fun saveUsernameToFirebase(username: String) {
-
-        // Crea un objeto Map para almacenar los datos a actualizar en la base de datos
-        val userData = hashMapOf<String, Any>(
-            "username" to username
-        )
-
-        val documentId = email
-        db.collection("users")
-            .document(documentId)
-            .update(userData)
-            .addOnSuccessListener {
-                Log.d(ReservationViewModel.TAG, "Username saved")
-            }
-            .addOnFailureListener { e ->
-                Log.e(ReservationViewModel.TAG, "Error in username save", e)
-            }
-    }
-
-    private fun saveEmail(email: String) {
-        val emailColRef = db.collection("users")
-            .whereEqualTo("email", email)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                if (querySnapshot.isEmpty) {
-                    Log.d(TAG, "No hay coleccion==========================================")
-
-                    val documentId = email
-                    val userData = hashMapOf<String, Any>(
-                        "email" to email
-                    )
-                    db.collection("users")
-                        .document(documentId)
-                        .set(userData)
-                        .addOnSuccessListener {
-                            Log.d(ReservationViewModel.TAG, "Email guardado correctamente")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.e(ReservationViewModel.TAG, "Error al guardar email", e)
-                        }
-
-
-                }
-
-            }
-    }
-    private fun checkUsernameAvailability(username: String, callback: (Boolean) -> Unit) {
-        val usersCollection = db.collection("users")
-        val usernameQuery = usersCollection.whereEqualTo("username", username)
-
-        usernameQuery.get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val querySnapshot = task.result
-                val isAvailable = querySnapshot.isEmpty
-                callback(isAvailable)
-            } else {
-                // Manejo del error
-                callback(false)
-            }
-        }
-    }
-
 }

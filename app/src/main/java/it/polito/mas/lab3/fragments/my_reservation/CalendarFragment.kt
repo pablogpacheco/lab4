@@ -16,6 +16,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
@@ -24,6 +27,7 @@ import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationAdapter
 import it.polito.mas.lab3.data.ReservationViewModel
+import it.polito.mas.lab3.data.user.UserViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -31,16 +35,25 @@ import java.util.Locale
 
 
 class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
+    //Firestore db
+    val db = Firebase.firestore
 
+    companion object {
+        const val TAG = "FirestoreApp"
+    }
     private lateinit var calendarView: CustomCalendarView
     private lateinit var displayUser : TextView
-    private lateinit var backToUser: Button
     private lateinit var recyclerView : RecyclerView
     private lateinit var reservationAdapter: ReservationAdapter
     private lateinit var reservedDates: List<Reservation>
 
 
+
     private val vm by viewModels<ReservationViewModel>()
+    private val vmU by viewModels<UserViewModel>()
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -51,15 +64,39 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_calendar, container, false)
+        var myUser=""
+        val document = db.collection("users").document(currentUser?.email!!)
+        document.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val username = documentSnapshot.getString("username")
+                    myUser = username!!
+                    displayUser = view.findViewById(R.id.display_user)
+                    displayUser.text = getString(R.string.display_user, myUser)
 
+                    //Call the function to update the LiveData in the viewModel:
+                    vm.getNameBased(myUser)
+                    Log.d(TAG, "Obtaining user ${username}")
+
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Error obtaining user", exception)
+            }
+        Log.d(TAG, "Obtaining user===========> ${myUser}")
         //Display the user:
-        val myUser = arguments?.getString("my_username") ?: ""
+        /*vmU.getUsername()
+        myUser = vmU.username.value!!
 
+         */
+/*
         displayUser = view.findViewById(R.id.display_user)
         displayUser.text = getString(R.string.display_user, myUser)
 
         //Call the function to update the LiveData in the viewModel:
         vm.getNameBased(myUser)
+
+ */
 
         //Set the calendar and color the days where there's a reservation:
         val decorators : MutableList<DayDecorator> = mutableListOf()
@@ -85,7 +122,7 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
         }
 
 
-        backToUser = view.findViewById(R.id.backToUser)
+
 
         return view
     }
@@ -137,9 +174,6 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
             }
         })
 
-        backToUser.setOnClickListener {
-            findNavController().navigate(R.id.action_calendarFragment_to_categoryFragment)
-        }
 
     }
 

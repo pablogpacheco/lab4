@@ -1,0 +1,197 @@
+package it.polito.mas.lab3.data.user
+
+
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import it.polito.mas.lab3.data.Reservation
+import it.polito.mas.lab3.data.ReservationViewModel
+import java.util.*
+
+
+
+class UserViewModel (application: Application): AndroidViewModel(application) {
+
+    //All the data from the database:
+
+
+    private val _username = MutableLiveData<String?>()
+    val username: LiveData<String?> get() = _username
+
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+    //LiveData for username selection:
+    private val mutableNameList = MutableLiveData<List<Reservation>>()
+    val filteredByNameData: LiveData<List<Reservation>> get() = mutableNameList
+
+    //Firestore db
+    val db = Firebase.firestore
+
+    companion object {
+        const val TAG = "FirestoreApp"
+    }
+
+    fun updateUser(user: User) {
+
+        val documentId = user.email
+        db.collection("users")
+            .document(documentId)
+            .set(user)
+            .addOnSuccessListener {
+                Log.d(TAG, "User saved")
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Error saving user", e)
+            }
+
+    }
+/*
+    fun getUser(user: User) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+
+
+             db.collection("users")
+                .document(user.email)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    Log.d(TAG, "ok")
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "Error obtaining user", e)
+                }
+
+    }
+
+ */
+
+    fun getUsername() {
+
+        val document = db.collection("users").document(currentUser?.email!!)
+        document.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val username = documentSnapshot.getString("username")
+                    _username.value = username
+                } else {
+                    _username.value = null
+                }
+            }
+            .addOnFailureListener { exception ->
+                _username.value = null
+                Log.e(TAG, "Error obtaining user", exception)
+            }
+    }
+
+
+    fun checkUser(email: String): Boolean {
+        val query = db.collection("users")
+            .whereEqualTo("email", email)
+            .get()
+
+        val querySnapshot = Tasks.await(query)
+
+        var aux = false
+        for (document in querySnapshot) {
+            if (document.contains("username")) {
+                Log.d(TAG, "debo ir antes==========================================")
+                aux = true
+            } else {
+                Log.d(TAG, "debo ir antes==========================================")
+                aux = false
+            }
+        }
+        Log.d(TAG, "Dbo ir despues==========================================")
+        return aux
+    }
+
+
+    fun saveEmail(email: String) {
+        val emailColRef = db.collection("users")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.isEmpty) {
+                    Log.d(TAG, "No hay coleccion==========================================")
+
+                    val documentId = email
+                    val userData = hashMapOf<String, Any>(
+                        "email" to email
+                    )
+                    db.collection("users")
+                        .document(documentId)
+                        .set(userData)
+                        .addOnSuccessListener {
+                            Log.d(ReservationViewModel.TAG, "Email guardado correctamente========================")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e(ReservationViewModel.TAG, "Error al guardar email==================", e)
+                        }
+
+
+                }
+
+            }
+    }
+
+    fun checkUsernameAvailability(username: String, callback: (Boolean) -> Unit) {
+        val usersCollection = db.collection("users")
+        val usernameQuery = usersCollection.whereEqualTo("username", username)
+
+        usernameQuery.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val querySnapshot = task.result
+                val isAvailable = querySnapshot.isEmpty
+                callback(isAvailable)
+            } else {
+                // Manejo del error
+                callback(false)
+            }
+        }
+    }
+
+
+
+    fun saveUsernameToFirebase(username: String, email: String) {
+
+        // Crea un objeto Map para almacenar los datos a actualizar en la base de datos
+        val userData = hashMapOf<String, Any>(
+            "username" to username
+        )
+
+        val documentId = email
+        db.collection("users")
+            .document(documentId)
+            .update(userData)
+            .addOnSuccessListener {
+                Log.d(ReservationViewModel.TAG, "Username saved")
+            }
+            .addOnFailureListener { e ->
+                Log.e(ReservationViewModel.TAG, "Error in username save", e)
+            }
+    }
+
+
+
+    fun deleteUser(user: User){
+
+        val collectionRef = db.collection("users")
+
+        val documentId = user.email
+
+        collectionRef.document(documentId)
+            .delete()
+            .addOnSuccessListener {
+                // Documento eliminado exitosamente
+                Log.d(TAG, "User deleted: $documentId")
+            }
+            .addOnFailureListener { e ->
+                // Ocurrió un error al eliminar el documento
+                Log.e(TAG, "Error deleting", e)
+            }
+    }
+}

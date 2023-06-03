@@ -33,12 +33,6 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <EditText
-            android:layout_marginTop="16dp"
-            android:id="@+id/nombre_usuario"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="Name of the user" />
 
         <LinearLayout
             android:layout_width="match_parent"

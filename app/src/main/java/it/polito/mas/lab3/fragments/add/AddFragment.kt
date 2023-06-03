@@ -2,6 +2,7 @@ package it.polito.mas.lab3.fragments.add
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationViewModel
+import it.polito.mas.lab3.data.user.UserViewModel
 import it.polito.mas.lab3.models.Slot
 import it.polito.mas.lab3.models.SlotAdapter
 import kotlinx.coroutines.launch
@@ -33,11 +38,15 @@ class AddFragment : Fragment() {
     //Let's declare the viewModel:
     private val vm by viewModels<ReservationViewModel>()
 
+    val db = Firebase.firestore
+
+    companion object {
+        const val TAG = "FirestoreApp"
+    }
 
 
     private lateinit var fechaReserva: TextView
     private lateinit var sport_selected: TextView
-    private lateinit var nombreUsuario: EditText
     private lateinit var city: Spinner
     private lateinit var court: Spinner
     private lateinit var botonAgregarReserva: Button
@@ -62,6 +71,9 @@ class AddFragment : Fragment() {
     private lateinit var slotAdapter: SlotAdapter
     private var selectedItem: Int? = null
 
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+
+
 
     //Function to display our data:
     @SuppressLint("MissingInflatedId", "FragmentLiveDataObserve", "SimpleDateFormat")
@@ -71,6 +83,9 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add, container, false)
+
+
+
 
         //Spinner for the court and the city:
         city = view.findViewById(R.id.city)
@@ -88,9 +103,6 @@ class AddFragment : Fragment() {
         //A TextView for the date and one for the selected sport:
         fechaReserva = view.findViewById(R.id.fecha_reserva)
         sport_selected = view.findViewById(R.id.sport_selected)
-
-        //Name of the user that wants to reserve the court:
-        nombreUsuario = view.findViewById(R.id.nombre_usuario)
 
         //Button to add the reservation and one to go back:
         botonAgregarReserva = view.findViewById(R.id.boton_agregar_reserva)
@@ -118,6 +130,22 @@ class AddFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Obtener los valores de los campos del formulario
+        var myUser=""
+        val document = db.collection("users").document(currentUser?.email!!)
+        document.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val username = documentSnapshot.getString("username")
+                    myUser = username!!
+                    Log.d(UserViewModel.TAG, "Error obtaining user ${username}")
+
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e(UserViewModel.TAG, "Error obtaining user", exception)
+            }
 
         //Get the string of the date and put in the TextView:
         val selectedDateString = arguments?.getString("selected_date") ?: ""
@@ -178,10 +206,10 @@ class AddFragment : Fragment() {
         val agregarReservaButton = view.findViewById<Button>(R.id.boton_agregar_reserva)
         agregarReservaButton.setOnClickListener {
 
-            // Obtener los valores de los campos del formulario
-            val nombre = nombreUsuario.text.toString()
+
             val cityChosen = city.selectedItem.toString()
             val court = court.selectedItem.toString()
+            val nombre = myUser
 
             //Date
             val dateFormat = SimpleDateFormat("yyyy-MM-dd")
