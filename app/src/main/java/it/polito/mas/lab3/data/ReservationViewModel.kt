@@ -12,9 +12,6 @@ import java.util.Date
 
 class ReservationViewModel(application: Application): AndroidViewModel(application) {
 
-    //Value for the repo in order to call the APIs:
-    //private val repository = ReservationRepository(application)
-
     //All the data from the database:
     private val mutableEveryData = MutableLiveData<List<Reservation>>()
     val everyData: LiveData<List<Reservation>> get() = mutableEveryData
@@ -28,16 +25,14 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
     val filteredByNameData : LiveData<List<Reservation>> get() = mutableNameList
 
     //Firestore db
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
+
     companion object {
         const val TAG = "FirestoreApp"
     }
 
     fun addReservation(reservation: Reservation){
-       /* thread {
-            repository.addReservation(reservation)
-        }
-        */
+
         val documentId = reservation.username + reservation.sport_category + reservation.city + reservation.date.toString() + reservation.slot.toString()
         db.collection("reservations")
             .document(documentId)
@@ -52,10 +47,7 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
     }
 
     fun getAll(){
-     /*   thread {
-            mutableEveryData.postValue(repository.getAllData())
-        }
-      */
+
         db.collection("reservations")
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -63,7 +55,6 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
 
                 for (document in querySnapshot) {
                     //Take the fields from firebase db
-                    val id = document.getLong("id")
                     val username = document.getString("username")
                     val sportCategory = document.getString("sport_category")
                     val date = document.getDate("date")
@@ -75,7 +66,6 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
                     val review = document.getString("review")
 
                     val reservation = Reservation(
-                        id,
                         username,
                         sportCategory,
                         date,
@@ -113,7 +103,6 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
 
                 for (document in querySnapshot) {
                     //Take the fields from firebase db
-                    val id = document.getLong("id")
                     val username = document.getString("username")
                     val sportCategory = document.getString("sport_category")
                     val date = document.getDate("date")
@@ -125,7 +114,6 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
                     val review = document.getString("review")
 
                     val reservation = Reservation(
-                        id,
                         username,
                         sportCategory,
                         date,
@@ -160,7 +148,6 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
 
                 for (document in querySnapshot) {
                     //Take the fields from firebase db
-                    val id = document.getLong("id")
                     val username = document.getString("username")
                     val sportCategory = document.getString("sport_category")
                     val date = document.getDate("date")
@@ -172,7 +159,6 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
                     val review = document.getString("review")
 
                     val reservation = Reservation(
-                        id,
                         username,
                         sportCategory,
                         date,

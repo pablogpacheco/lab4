@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
@@ -27,7 +26,7 @@ import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationAdapter
 import it.polito.mas.lab3.data.ReservationViewModel
-import it.polito.mas.lab3.data.user.UserViewModel
+//import it.polito.mas.lab3.data.user.UserViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -35,8 +34,9 @@ import java.util.Locale
 
 
 class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
+
     //Firestore db
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
 
     companion object {
         const val TAG = "FirestoreApp"
@@ -50,7 +50,7 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
 
 
     private val vm by viewModels<ReservationViewModel>()
-    private val vmU by viewModels<UserViewModel>()
+    //private val vmU by viewModels<UserViewModel>()
     private val currentUser = FirebaseAuth.getInstance().currentUser
 
 
@@ -76,14 +76,14 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
 
                     //Call the function to update the LiveData in the viewModel:
                     vm.getNameBased(myUser)
-                    Log.d(TAG, "Obtaining user ${username}")
+                    Log.d(TAG, "Obtaining user $username")
 
                 }
             }
             .addOnFailureListener { exception ->
                 Log.e(TAG, "Error obtaining user", exception)
             }
-        Log.d(TAG, "Obtaining user===========> ${myUser}")
+        Log.d(TAG, "Obtaining user===========> $myUser")
         //Display the user:
         /*vmU.getUsername()
         myUser = vmU.username.value!!
@@ -177,7 +177,6 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
         val today = Date()
 
         val args = bundleOf(
-            "reservation_id" to reservation.id,
             "reservation_username" to reservation.username,
             "reservation_sport" to reservation.sport_category,
             "reservation_date" to dateFormat.format(reservation.date!!),

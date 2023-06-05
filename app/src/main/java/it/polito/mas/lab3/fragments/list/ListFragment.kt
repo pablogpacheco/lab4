@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.stacktips.view.CalendarListener
 import com.stacktips.view.CustomCalendarView
 import com.stacktips.view.DayDecorator
-import com.stacktips.view.DayView
 import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationViewModel
@@ -69,8 +68,85 @@ class ListFragment : Fragment() {
                 // Si hay una fecha y un color válidos
 
                 // Crear un decorador de día con el color correspondiente
-                decorators.add(object : DayDecorator {
-                    override fun decorate(view: DayView?) {
+                decorators.add(DayDecorator { view ->
+                    if (reservedDates.isNotEmpty()) {
+                        for (reservedDate in reservedDates) {
+                            val reservedCalendar = Calendar.getInstance().apply {
+                                time = reservedDate.date!!
+                                set(Calendar.HOUR_OF_DAY, 0)
+                                set(Calendar.MINUTE, 0)
+                                set(Calendar.SECOND, 0)
+                                set(Calendar.MILLISECOND, 0)
+                            }
+                            val viewCalendar = Calendar.getInstance().apply {
+                                time = view?.date!!
+                                set(Calendar.HOUR_OF_DAY, 0)
+                                set(Calendar.MINUTE, 0)
+                                set(Calendar.SECOND, 0)
+                                set(Calendar.MILLISECOND, 0)
+                            }
+                            val numReservedSlots = getNumReservedSlotsByDateAndSport(
+                                reservedDates, selectedSport, viewCalendar.time)
+
+                            if (reservedCalendar.compareTo(viewCalendar) == 0 && reservedDate.sport_category == selectedSport ) {
+                                if (numReservedSlots>=numSlotsMax){
+                                    view?.setBackgroundColor(allReservedColor)
+                                }else {
+                                    view?.setBackgroundColor(reservedColor)
+                                }
+                            }
+                        }
+
+                    }
+                })
+
+                calendarView.decorators = decorators
+                calendarView.refreshCalendar(currentCalendar)
+            }
+
+
+        }
+
+        return view
+    }
+
+    fun getNumReservedSlotsByDateAndSport(
+        reservedDates: List<Reservation>,
+        sport: String,
+        date: Date
+    ): Int {
+        // Obtener todas las reservas para la fecha dada
+        val reservasEnFecha = reservedDates.filter { it.date == date }
+        // Filtrar las reservas según el deporte seleccionado
+        val reservasDelDeporte = reservasEnFecha.filter { it.sport_category == sport }
+        // Contar el número de slots reservados
+        return reservasDelDeporte.count()
+    }
+
+    //Function to specify action when the view has been created:
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        sportSelected.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                //val sportName = parent.getItemAtPosition(position).toString()
+                selectedSport = parent.getItemAtPosition(position).toString()
+
+                vm.everyData.observe(
+                    viewLifecycleOwner
+                ) { reservation ->
+                    reservedDates = reservation
+                    val numSlotsMax = 7
+
+                    // Crear un mapa que asocie cada fecha con el número de slots reservados
+                    val reservedColor = Color.parseColor("#FFFF00")
+                    val allReservedColor = Color.parseColor("#FF0000")
+
+                    val decorators = mutableListOf<DayDecorator>()
+                    // Si hay una fecha y un color válidos
+
+                    // Crear un decorador de día con el color correspondiente
+                    decorators.add(DayDecorator { view ->
                         if (reservedDates.isNotEmpty()) {
                             for (reservedDate in reservedDates) {
                                 val reservedCalendar = Calendar.getInstance().apply {
@@ -100,88 +176,6 @@ class ListFragment : Fragment() {
                             }
 
                         }
-                    }
-
-
-                })
-
-                calendarView.decorators = decorators
-                calendarView.refreshCalendar(currentCalendar)
-            }
-
-
-        }
-
-        return view
-    }
-
-    fun getNumReservedSlotsByDateAndSport(reservedDates: List<Reservation>, sport: String, date: Date): Int {
-        // Obtener todas las reservas para la fecha dada
-        val reservasEnFecha = reservedDates.filter { it.date == date }
-        // Filtrar las reservas según el deporte seleccionado
-        val reservasDelDeporte = reservasEnFecha.filter { it.sport_category == sport }
-        // Contar el número de slots reservados
-        val numSlotsReservados = reservasDelDeporte.count()
-        return numSlotsReservados
-    }
-
-    //Function to specify action when the view has been created:
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        sportSelected.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                //val sportName = parent.getItemAtPosition(position).toString()
-                selectedSport = parent.getItemAtPosition(position).toString()
-
-                vm.everyData.observe(
-                    viewLifecycleOwner
-                ) { reservation ->
-                    reservedDates = reservation
-                    val numSlotsMax = 7
-
-                    // Crear un mapa que asocie cada fecha con el número de slots reservados
-                    val reservedColor = Color.parseColor("#FFFF00")
-                    val allReservedColor = Color.parseColor("#FF0000")
-
-                    val decorators = mutableListOf<DayDecorator>()
-                    // Si hay una fecha y un color válidos
-
-                    // Crear un decorador de día con el color correspondiente
-                    decorators.add(object : DayDecorator {
-                        override fun decorate(view: DayView?) {
-                            if (reservedDates.isNotEmpty()) {
-                                for (reservedDate in reservedDates) {
-                                    val reservedCalendar = Calendar.getInstance().apply {
-                                        time = reservedDate.date!!
-                                        set(Calendar.HOUR_OF_DAY, 0)
-                                        set(Calendar.MINUTE, 0)
-                                        set(Calendar.SECOND, 0)
-                                        set(Calendar.MILLISECOND, 0)
-                                    }
-                                    val viewCalendar = Calendar.getInstance().apply {
-                                        time = view?.date!!
-                                        set(Calendar.HOUR_OF_DAY, 0)
-                                        set(Calendar.MINUTE, 0)
-                                        set(Calendar.SECOND, 0)
-                                        set(Calendar.MILLISECOND, 0)
-                                    }
-                                    val numReservedSlots = getNumReservedSlotsByDateAndSport(
-                                        reservedDates, selectedSport, viewCalendar.time)
-
-                                    if (reservedCalendar.compareTo(viewCalendar) == 0 && reservedDate.sport_category == selectedSport ) {
-                                        if (numReservedSlots>=numSlotsMax){
-                                            view?.setBackgroundColor(allReservedColor)
-                                        }else {
-                                            view?.setBackgroundColor(reservedColor)
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-
-
                     })
 
                     calendarView.decorators = decorators

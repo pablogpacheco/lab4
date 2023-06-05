@@ -1,20 +1,20 @@
 package it.polito.mas.lab3.models
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.ReservationViewModel
 
-class SlotAdapter(  private val lifeCycleOwner: LifecycleOwner,
-                    private val slots: List<Slot>,
-                    private val vm: ReservationViewModel) :
+@Suppress("IMPLICIT_BOXING_IN_IDENTITY_EQUALS")
+class SlotAdapter(private val lifeCycleOwner: LifecycleOwner,
+                  private val slots: List<Slot>,
+                  private val vm: ReservationViewModel) :
     RecyclerView.Adapter<SlotAdapter.SlotViewHolder>() {
 
     private var listener: OnItemClickListener? = null
@@ -36,6 +36,7 @@ class SlotAdapter(  private val lifeCycleOwner: LifecycleOwner,
         return SlotViewHolder(view)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: SlotViewHolder, position: Int) {
         val slot = slots[position]
 

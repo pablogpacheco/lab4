@@ -38,7 +38,7 @@ class AddFragment : Fragment() {
     //Let's declare the viewModel:
     private val vm by viewModels<ReservationViewModel>()
 
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
 
     companion object {
         const val TAG = "FirestoreApp"
@@ -139,7 +139,7 @@ class AddFragment : Fragment() {
                 if (documentSnapshot.exists()) {
                     val username = documentSnapshot.getString("username")
                     myUser = username!!
-                    Log.d(UserViewModel.TAG, "Error obtaining user ${username}")
+                    Log.d(UserViewModel.TAG, "Error obtaining user $username")
 
                 }
             }
@@ -217,7 +217,7 @@ class AddFragment : Fragment() {
 
             //Añadir a la bbdd
 
-            val reservation = Reservation(null, nombre, selectedSportString,
+            val reservation = Reservation(nombre, selectedSportString,
                 selectedDate, selectedItem, cityChosen, court,
                 0, 0, ""
             )

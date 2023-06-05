@@ -10,7 +10,7 @@ import it.polito.mas.lab3.R
 
 class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder>() {
 
-    var reservations: List<Reservation> = emptyList()
+    private var reservations: List<Reservation> = emptyList()
     private var listener: OnItemClickListener? = null
 
     private val slotsList = listOf("8:00-9:00",
@@ -59,10 +59,10 @@ class ReservationAdapter : RecyclerView.Adapter<ReservationAdapter.ReservationVi
     inner class ReservationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         //val reservationDate: TextView = itemView.findViewById(R.id.reservation_date)
-        val reservationSport: TextView = itemView.findViewById(R.id.reservation_sport)
-        val reservationSlot: TextView = itemView.findViewById(R.id.reservation_slot)
-        val reservationCity: TextView = itemView.findViewById(R.id.reservation_city)
-        val reservationCourt: TextView = itemView.findViewById(R.id.reservation_court)
+        private val reservationSport: TextView = itemView.findViewById(R.id.reservation_sport)
+        private val reservationSlot: TextView = itemView.findViewById(R.id.reservation_slot)
+        private val reservationCity: TextView = itemView.findViewById(R.id.reservation_city)
+        private val reservationCourt: TextView = itemView.findViewById(R.id.reservation_court)
 
         @SuppressLint("SetTextI18n")
         fun bind(reservation:Reservation){

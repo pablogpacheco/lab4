@@ -45,27 +45,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Reservation ID:"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-                    <TextView
-                        android:id="@+id/detail_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:text="User that made the reservation:"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -224,6 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/purple_500"
                     android:text="Back" />
 
             </LinearLayout>

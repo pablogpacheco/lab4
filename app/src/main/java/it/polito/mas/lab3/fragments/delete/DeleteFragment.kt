@@ -44,7 +44,6 @@ class DeleteFragment : Fragment() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         //Take back your reservation:
-        val myID = arguments?.getLong("reservation_id") ?: 0
         val myUsername = arguments?.getString("reservation_username") ?: ""
         val mySport = arguments?.getString("reservation_sport") ?: ""
         val myDate = arguments?.getString("reservation_date") ?: ""
@@ -56,7 +55,6 @@ class DeleteFragment : Fragment() {
         val myReview = arguments?.getString("reservation_review") ?: ""
 
         val myReservation = Reservation(
-            myID,
             myUsername,
             mySport,
             dateFormat.parse(myDate)!!,
@@ -82,26 +80,25 @@ class DeleteFragment : Fragment() {
             val formatter = SimpleDateFormat("yyyy-MM-dd")
             val dateReser = formatter.parse(myDate)
 
+            val args = bundleOf(
+                "reservation_username" to myUsername,
+                "reservation_sport" to mySport,
+                "reservation_date" to myDate,
+                "reservation_slot" to mySlot,
+                "reservation_city" to myCity,
+                "reservation_court" to myCourt,
+                "reservation_quality" to myQuality,
+                "reservation_service" to myService,
+                "reservation_review" to myReview
+            )
+
             val today = Date()
-            if (dateReser.before(today)) {
-                val args = bundleOf(
-                    "my_username" to myUsername,
-                )
-                findNavController().navigate(R.id.action_deleteFragment_to_calendarFragment, args)
-            } else {
-                val args = bundleOf(
-                    "reservation_id" to myID,
-                    "reservation_username" to myUsername,
-                    "reservation_sport" to mySport,
-                    "reservation_date" to myDate,
-                    "reservation_slot" to mySlot,
-                    "reservation_city" to myCity,
-                    "reservation_court" to myCourt,
-                    "reservation_quality" to myQuality,
-                    "reservation_service" to myService,
-                    "reservation_review" to myReview
-                )
-                findNavController().navigate(R.id.action_deleteFragment_to_modifyFragment, args)
+            if (dateReser != null) {
+                if (dateReser.before(today)) {
+                    findNavController().navigate(R.id.action_deleteFragment_to_rateFragment, args)
+                } else {
+                    findNavController().navigate(R.id.action_deleteFragment_to_modifyFragment, args)
+                }
             }
         }
     }

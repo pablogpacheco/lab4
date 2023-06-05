@@ -2,7 +2,6 @@ package it.polito.mas.lab3.fragments.modify
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.Selection.setSelection
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -20,13 +18,13 @@ import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.Date
 
 class ModifyFragment : Fragment() {
 
     private val vm by viewModels<ReservationViewModel>()
 
     //Variable for our EditText:
-    private lateinit var reservationID : TextView
     private lateinit var reservationUser: EditText
     private lateinit var reservationSport: Spinner
     private lateinit var reservationDate: EditText
@@ -38,21 +36,6 @@ class ModifyFragment : Fragment() {
     private lateinit var saveChange: Button
     private lateinit var deleteChange: Button
     private lateinit var backFromChange: Button
-
-    private val slotsList = listOf("8:00-9:00",
-        "9:00-10:00",
-        "10:00-11:00",
-        "11:00-12:00",
-        "12:00-13:00",
-        "13:00-14:00",
-        "14:00-15:00",
-        "15:00-16:00",
-        "16:00-17:00",
-        "17:00-18:00",
-        "18:00-19:00",
-        "19:00-20:00",
-        "20:00-21:00",
-    )
 
     private val courtList = listOf("Court 1", "Court 2", "Court 3", "Court 4")
     private val cityList = listOf("Turin", "Milan", "Rome", "Naples", "Florence")
@@ -69,16 +52,14 @@ class ModifyFragment : Fragment() {
         vm.getAll()
 
         //Take back your reservation:
-        val myID = arguments?.getLong("reservation_id") ?: 0
         val myUsername = arguments?.getString("reservation_username") ?: ""
-        val mySport = arguments?.getString("reservation_sport") ?: ""
+        //val mySport = arguments?.getString("reservation_sport") ?: ""
         val myDate = arguments?.getString("reservation_date") ?: ""
-        val mySlot = arguments?.getInt("reservation_slot") ?: 0
-        val myCity = arguments?.getString("reservation_city") ?: ""
-        val myCourt = arguments?.getString("reservation_court") ?: ""
+        //val mySlot = arguments?.getInt("reservation_slot") ?: 0
+        //val myCity = arguments?.getString("reservation_city") ?: ""
+        //val myCourt = arguments?.getString("reservation_court") ?: ""
 
         //Link the views:
-        reservationID = view.findViewById(R.id.detail_id)
         reservationUser = view.findViewById(R.id.detail_user)
         reservationSport = view.findViewById(R.id.detail_sport)
         reservationDate = view.findViewById(R.id.detail_date)
@@ -92,12 +73,11 @@ class ModifyFragment : Fragment() {
         backFromChange = view.findViewById(R.id.backToRes)
 
         //Change the appearance of the views:
-        reservationID.text = myID.toString()
         reservationUser.setText(myUsername)
-       // reservationSport.(mySport)
+        //reservationSport.(mySport)
         reservationDate.setText(myDate)
-       // reservationSlot.setText(slotsList[mySlot-1])
-//        reservationCourt.setText(myCourt)
+        //reservationSlot.setText(slotsList[mySlot-1])
+        //reservationCourt.setText(myCourt)
 
         return view
     }
@@ -109,7 +89,6 @@ class ModifyFragment : Fragment() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         //Take back your reservation:
-        val myID = arguments?.getLong("reservation_id") ?: 0
         val myUsername = arguments?.getString("reservation_username") ?: ""
         val mySport = arguments?.getString("reservation_sport") ?: ""
         val myDate = arguments?.getString("reservation_date") ?: ""
@@ -133,7 +112,6 @@ class ModifyFragment : Fragment() {
         reservationSport.setSelection(sportPosition)
 
         val reservationOld = Reservation(
-            myID,
             myUsername,
             mySport,
             dateFormat.parse(myDate)!!,
@@ -144,7 +122,6 @@ class ModifyFragment : Fragment() {
             myService,
             myReview
         )
-       // var newSlot = reservationSlot.selectedItemPosition + 1
 
         saveChange.setOnClickListener {
             val selectedSlotPosition = reservationSlot.selectedItemPosition
@@ -153,17 +130,17 @@ class ModifyFragment : Fragment() {
             if (checkDate()) {
 
                 var checkValidUpdate = true
-                var checkValidSlot = true
                 var checkValidCity = false
                 var checkValidCourt = false
 
-               /* for ((index, element) in slotsList.withIndex()) {
+                /*
+               for ((index, element) in slotsList.withIndex()) {
                     if (element == reservationSlot.selectedItem.toString()) {
                         newSlot = index + 1
                         checkValidSlot = true
-
                     }
-                }*/
+                }
+                 */
 
 
                 for (element in courtList) {
@@ -209,13 +186,7 @@ class ModifyFragment : Fragment() {
                         "Error. Court not valid.",
                         Toast.LENGTH_SHORT
                     ).show()
-                }else if (!checkValidSlot) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Error. Slot not valid.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }else if (!checkValidCity) {
+                } else if (!checkValidCity) {
                     Toast.makeText(
                         requireContext(),
                         "Error. City not valid.",
@@ -224,7 +195,6 @@ class ModifyFragment : Fragment() {
                 } else if (checkValidUpdate) {
                     vm.deleteReservation(reservationOld)
                     vm.addReservation( Reservation(
-                            myID,
                             reservationUser.text.toString(),
                             reservationSport.selectedItem.toString(),
                             dateFormat.parse(reservationDate.text.toString()),
@@ -259,10 +229,17 @@ class ModifyFragment : Fragment() {
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Error. Update stopped because of date/slot conflict.",
+                        "Error. Update stopped because of the slot is already occupied.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+            }
+            else{
+                Toast.makeText(
+                    requireContext(),
+                    "Date chosen is invalid.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -270,7 +247,6 @@ class ModifyFragment : Fragment() {
 
             //If you click on a reservation, you go in editing the details:
             val args = bundleOf(
-                "reservation_id" to myID,
                 "reservation_username" to myUsername,
                 "reservation_sport" to mySport,
                 "reservation_date" to myDate,
@@ -296,11 +272,14 @@ class ModifyFragment : Fragment() {
     private fun checkDate() : Boolean{
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val today = Date()
         var check = false
 
         try {
-            dateFormat.parse(reservationDate.text.toString())
-            check = true
+            val selDate = dateFormat.parse(reservationDate.text.toString())
+            if (selDate != null) {
+                check = !selDate.before(today)
+            }
         } catch (pe : ParseException){
             Toast.makeText(
                 requireContext(),

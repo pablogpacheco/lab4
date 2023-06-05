@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RatingBar
-import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -90,7 +89,6 @@ class RateFragment : Fragment() {
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         //Take back your reservation:
-        val myID = arguments?.getLong("reservation_id") ?: 0
         val myUsername = arguments?.getString("reservation_username") ?: ""
         val mySport = arguments?.getString("reservation_sport") ?: ""
         val myDate = arguments?.getString("reservation_date") ?: ""
@@ -103,7 +101,6 @@ class RateFragment : Fragment() {
 
 
         val myReservation = Reservation(
-            myID,
             myUsername,
             mySport,
             dateFormat.parse(myDate)!!,
@@ -135,7 +132,7 @@ class RateFragment : Fragment() {
 
             vm.deleteReservation(myReservation)
             vm.addReservation(Reservation(
-                myID, myUsername, mySport, dateFormat.parse(myDate), mySlot,
+                myUsername, mySport, dateFormat.parse(myDate), mySlot,
                 myCity, myCourt, qualityValue, serviceValue, reviews
             ))
 
@@ -164,7 +161,6 @@ class RateFragment : Fragment() {
         deleteButton.setOnClickListener {
 
             val args = bundleOf(
-                "reservation_id" to myID,
                 "reservation_username" to myUsername,
                 "reservation_sport" to mySport,
                 "reservation_date" to myDate,
