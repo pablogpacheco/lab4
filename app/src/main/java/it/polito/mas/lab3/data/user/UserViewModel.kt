@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.room.ColumnInfo
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -40,7 +41,7 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
 
         val documentId = user.email
         db.collection("users")
-            .document(documentId)
+            .document(documentId!!)
             .set(user)
             .addOnSuccessListener {
                 Log.d(TAG, "User saved")
@@ -175,6 +176,46 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
             }
     }
 
+    fun getAll(){
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val reservationsList = mutableListOf<User>()
+
+                for (document in querySnapshot) {
+                    val email = document.getString("email")
+                    val username = document.getString("username")
+                    val name = document.getString("name")
+                    val age = document.getLong("age")?.toInt()
+                    val gender = document.getString("gender")
+                    val phoneNumber = document.getLong("phoneNumber")?.toInt()
+                    val sport = document.getString("sport")
+                    val level = document.getString("level")
+                    val experience = document.getString("experience")
+                    val city = document.getString("city")
+                    val weekday = document.getString("weekday")
+                    val slotfav = document.getString("slotfav")
+
+                    val user = User(
+                        email,
+                        username,
+                        name,
+                        age,
+                        gender,
+                        phoneNumber,
+                        sport,
+                        level,
+                        experience,
+                        city,
+                        weekday,
+                        slotfav
+                    )
+                }
+            }.addOnFailureListener { e ->
+                Log.e(ReservationViewModel.TAG, "Error obtaining User", e)
+            }
+    }
+
 
 
     fun deleteUser(user: User){
@@ -183,7 +224,7 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
 
         val documentId = user.email
 
-        collectionRef.document(documentId)
+        collectionRef.document(documentId!!)
             .delete()
             .addOnSuccessListener {
                 // Documento eliminado exitosamente
