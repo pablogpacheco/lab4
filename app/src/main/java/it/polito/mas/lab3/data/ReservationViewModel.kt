@@ -88,10 +88,7 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
 
 
     fun getSportBased(date: Date, sport: String, city: String, court: String){
-        /*thread {
-            mutableFilteredList.postValue(repository.getReservationsByDateAndSport(date, sport, city, court))
-        }
-         */
+
         db.collection("reservations")
             .whereEqualTo("date", date)
             .whereEqualTo("sport_category", sport)
@@ -105,10 +102,10 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
                     //Take the fields from firebase db
                     val username = document.getString("username")
                     val sportCategory = document.getString("sport_category")
-                    val date = document.getDate("date")
+                    val newDate = document.getDate("date")
                     val slot = document.getLong("slot")?.toInt()
-                    val city = document.getString("city")
-                    val court = document.getString("court")
+                    val newCity = document.getString("city")
+                    val newCourt = document.getString("court")
                     val qualityValue = document.getLong("quality_value")?.toInt()
                     val serviceValue = document.getLong("service_value")?.toInt()
                     val review = document.getString("review")
@@ -116,10 +113,10 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
                     val reservation = Reservation(
                         username,
                         sportCategory,
-                        date,
+                        newDate,
                         slot,
-                        city,
-                        court,
+                        newCity,
+                        newCourt,
                         qualityValue,
                         serviceValue,
                         review
@@ -136,10 +133,7 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
     }
 
     fun getNameBased(username: String){
-        /*thread {
-            mutableNameList.postValue(repository.getReservationsByName(username))
-        }
-         */
+
         db.collection("reservations")
             .whereEqualTo("username", username)
             .get()
@@ -148,7 +142,7 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
 
                 for (document in querySnapshot) {
                     //Take the fields from firebase db
-                    val username = document.getString("username")
+                    val newUsername = document.getString("username")
                     val sportCategory = document.getString("sport_category")
                     val date = document.getDate("date")
                     val slot = document.getLong("slot")?.toInt()
@@ -159,7 +153,7 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
                     val review = document.getString("review")
 
                     val reservation = Reservation(
-                        username,
+                        newUsername,
                         sportCategory,
                         date,
                         slot,
@@ -181,52 +175,7 @@ class ReservationViewModel(application: Application): AndroidViewModel(applicati
             }
     }
 
-    fun updateReservation(reservationOld: Reservation,reservationNew: Reservation) {
-        /*thread {
-            repository.updateData(reservation)
-        }
-         */
-        /*
-        val documentIdOld = reservationOld.username + reservationOld.sport_category + reservationOld.city + reservationOld.date.toString() + reservationOld.slot.toString()
-        val documentIdNew = reservationNew.username + reservationNew.sport_category + reservationNew.city + reservationNew.date.toString() + reservationNew.slot.toString()
-         */
-        val collectionRef = db.collection("reservations")
-        addReservation(reservationNew)
-        deleteReservation(reservationOld)
-        Log.d(TAG, "Reservation updated ")
-                   /* // Update
-        collectionRef.document(documentId)
-            .update(
-                        "username", reservationNew.username,
-                        "sport_category", reservationNew.sport_category,
-                        "date", reservationNew.date,
-                        "slot", reservationNew.slot,
-                        "city", reservationNew.city,
-                        "court", reservationNew.court
-                    )
-                        .addOnSuccessListener {
-                            Log.d(TAG, "Document id = ${documentId} ")
-
-                        }
-
-
-                        .addOnFailureListener { e ->
-                            Log.e(TAG, "failed to update, Document id = ${documentId}", e)
-                        }
-
-        */
-
-                }
-
-
-
-
-
     fun deleteReservation(reservation: Reservation){
-    /*    thread {
-            repository.deleteReservation(id)
-        }
-     */
 
         val collectionRef = db.collection("reservations")
 
