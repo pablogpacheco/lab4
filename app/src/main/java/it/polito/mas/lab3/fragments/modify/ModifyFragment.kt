@@ -124,6 +124,7 @@ class ModifyFragment : Fragment() {
         )
 
         saveChange.setOnClickListener {
+
             val selectedSlotPosition = reservationSlot.selectedItemPosition
             val selectedCourtPosition = reservationCourt.selectedItemPosition
 
@@ -142,7 +143,6 @@ class ModifyFragment : Fragment() {
                 }
                  */
 
-
                 for (element in courtList) {
                     if(element == reservationCourt.selectedItem.toString()) {
                         checkValidCourt = true
@@ -158,7 +158,7 @@ class ModifyFragment : Fragment() {
                 if (vm.everyData.value != null) {
                     for (element in vm.everyData.value!!) {
                         if (element.date == dateFormat.parse(reservationDate.text.toString()) &&
-                            element.slot == selectedSlotPosition &&
+                            element.slot == selectedSlotPosition+1 &&
                             element.sport_category == reservationSport.selectedItem.toString() &&
                             element.city == reservationCity.selectedItem.toString() &&
                             element.court == reservationCourt.selectedItem.toString()
