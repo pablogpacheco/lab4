@@ -107,12 +107,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <EditText
+                    <TextView
                         android:id="@+id/emailField"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
-                        android:inputType="textEmailAddress"
-                        android:hint="Insert email"
                         android:textColor="#3F51B5" />
 
                     <EditText

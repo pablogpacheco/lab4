@@ -24,6 +24,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -35,6 +36,7 @@ import it.polito.mas.lab3.data.ReservationViewModel
 import it.polito.mas.lab3.data.user.User
 import it.polito.mas.lab3.data.user.UserViewModel
 import org.json.JSONObject
+import org.w3c.dom.Text
 import java.io.File
 import java.io.FileDescriptor
 import java.io.FileInputStream
@@ -50,7 +52,7 @@ class EditFragment : Fragment() {
     private lateinit var ageField: EditText
     private lateinit var genderField: Spinner
 
-    lateinit var emailField: EditText
+
     lateinit var phoneNumberField: EditText
 
     lateinit var sport: Spinner
@@ -137,7 +139,8 @@ class EditFragment : Fragment() {
         ageField = view.findViewById(R.id.ageField)
         genderField = view.findViewById(R.id.genderField)
 
-        emailField = view.findViewById(R.id.emailField)
+        val emailField = view.findViewById<TextView>(R.id.emailField)
+        emailField.text = currentUser?.email
         phoneNumberField = view.findViewById(R.id.phoneNumberField)
 
         sport = view.findViewById(R.id.favourite_sport)
@@ -156,8 +159,8 @@ class EditFragment : Fragment() {
         vm.getUser(emailAddress!!)
 
         vm.user.observe(viewLifecycleOwner) { user ->
-            nameField .setText("${user?.name?:""}")
-            usernameField.setText("${user?.username?:""}")
+            nameField .setText(user?.name?:"")
+            usernameField.setText(user?.username?:"")
             if(user?.age==0) {
                 ageField.setText("")
             }else {
@@ -168,8 +171,8 @@ class EditFragment : Fragment() {
             }else {
                 phoneNumberField.setText("${user?.phoneNumber ?: ""}")
             }
-            emailField.setText("${user?.email?:""}")
-            prevExpField.setText("${user?.experience?:""}")
+            emailField.setText(user?.email?:"")
+            prevExpField.setText(user?.experience?:"")
 
 
             val genderPosition=genderList.indexOf("${user?.gender}")
@@ -231,13 +234,20 @@ class EditFragment : Fragment() {
 
 
 
-
+            var _age: Int?
+            var _phoneNumber: Int?
             val email = emailField.text.toString()?:null
             val username = usernameField.text.toString()?:null
             val name = nameField.text.toString()?:null
-            val age = ageField.text.toString().toInt()?:null
+            if (ageField.text.toString()==""){
+                _age = 0
+            } else { _age = ageField.text.toString().toInt()?:null}
+            val age = _age
             val gender = genderField.selectedItem.toString()?:null
-            val phoneNumber = phoneNumberField.text.toString().toInt()?:null
+            if (phoneNumberField.text.toString()==""){
+                _phoneNumber = 0
+            }else{ _phoneNumber = phoneNumberField.text.toString().toInt()?:null}
+            val phoneNumber = _phoneNumber
             val sport = sport.selectedItem.toString()?:null
             val level = skillsField.selectedItem.toString()?:null
             val experience = prevExpField.text.toString()?:null
