@@ -45,11 +45,12 @@
 
                 <TextView
                     android:id="@+id/username"
-                    android:layout_width="206dp"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/username"
                     android:textColor="#3F51B5"
-                    android:textSize="40sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -58,36 +59,41 @@
                     android:layout_marginBottom="5dp"
                     android:text="Personal Info:"
                     android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/name"
-                        android:layout_width="206dp"
+                        android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:text="@string/full_name"
-                        android:textColor="#3F51B5" />
+                        android:textColor="#000000"
+                        android:textSize="15sp"/>
 
                     <TextView
                         android:id="@+id/age"
-                        android:layout_width="206dp"
+                        android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:text="@string/age"
-                        android:textColor="#3F51B5" />
+                        android:textColor="#000000"
+                        android:textSize="15sp"/>
+                    <TextView
+                        android:id="@+id/gender"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="@string/gender"
+                        android:textColor="#000000"
+                        android:textSize="15sp"/>
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/gender"
-                    android:layout_width="206dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="@string/gender"
-                    android:textColor="#3F51B5" />
+
 
             </LinearLayout>
 
@@ -98,25 +104,30 @@
                 android:layout_marginBottom="5dp"
                 android:text="Contacts:"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="20sp"
+                android:textStyle="bold"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/email"
-                    android:layout_width="206dp"
+                    android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:text="@string/email"
-                    android:textColor="#3F51B5" />
+                    android:textColor="#000000"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/phoneNumber"
-                    android:layout_width="206dp"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/phoneNumber"
-                    android:textColor="#3F51B5" />
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    />
 
             </LinearLayout>
 
@@ -127,37 +138,42 @@
                 android:layout_marginBottom="5dp"
                 android:text="As a Player:"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="20sp"
+                android:textStyle="bold"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/fav_sport"
-                    android:layout_width="206dp"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/fav_sport"
-                    android:textColor="#3F51B5" />
+                    android:textColor="#000000"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/skills"
-                    android:layout_width="206dp"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="@string/skills"
-                    android:textColor="#3F51B5" />
+                    android:textColor="#000000"
+                    android:textSize="15sp"/>
+                <TextView
+                    android:id="@+id/previous_exp"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/prev_exp"
+                    android:textColor="#000000"
+                    android:textSize="15sp"/>
+
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/previous_exp"
-                android:layout_width="206dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="@string/prev_exp"
-                android:textColor="#3F51B5" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -166,56 +182,74 @@
                 android:layout_marginBottom="5dp"
                 android:text="Playgrounds preferences:"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="20sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/city"
-                android:layout_width="206dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:text="@string/city"
-                android:textColor="#3F51B5" />
+                android:textColor="#000000"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/day"
-                android:layout_width="206dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:text="@string/pref_day"
-                android:textColor="#3F51B5" />
+                android:textColor="#000000"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/timeslot"
-                android:layout_width="206dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:text="@string/pref_slot"
-                android:textColor="#3F51B5" />
+                android:textColor="#000000"
+                android:textSize="15sp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
 
             <Button
                 android:id="@+id/editButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:background="#3F51B5"
-                android:text="Edit" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/signOutBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="24dp"
-                android:text="Sign Out"
+
+                android:text="Edit"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                app:backgroundTint="#3F51B5"
+                app:backgroundTint="#4CAF50"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/signOutBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+
+                android:text="Sign Out"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:backgroundTint="#F44336"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+        </LinearLayout>
 
         </LinearLayout>
 
