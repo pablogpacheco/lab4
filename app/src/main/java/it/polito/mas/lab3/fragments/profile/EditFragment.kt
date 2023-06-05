@@ -13,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -81,6 +82,26 @@ class EditFragment : Fragment() {
 
     private val currentUser = FirebaseAuth.getInstance().currentUser
 
+    //SPINNERS
+    private val genderList=listOf("Male", "Female", "--")
+    private val cityList = listOf("Turin", "Milan", "Rome", "Naples", "Florence")
+    private val sportList=listOf("Football", "Basketball", "Tennis", "Volleyball", "Padel")
+    private val levelList=listOf("1° level", "2° level", "3° level", "4° level", "5° level")
+    private val dayList=listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    private val slotsList = listOf("1->8:00-9:00",
+        "2->9:00-10:00",
+        "3->10:00-11:00",
+        "4->11:00-12:00",
+        "5->12:00-13:00",
+        "6->13:00-14:00",
+        "7->14:00-15:00",
+        "8->15:00-16:00",
+        "9->16:00-17:00",
+        "10->17:00-18:00",
+        "11->18:00-19:00",
+        "12->19:00-20:00",
+        "13->20:00-21:00",
+    )
 
     @SuppressLint("ObsoleteSdkInt", "MissingInflatedId")
     override fun onCreateView(
@@ -138,18 +159,28 @@ class EditFragment : Fragment() {
             nameField .setText("${user?.name?:""}")
             usernameField.setText("${user?.username?:""}")
             ageField.setText("${user?.age?:""}")
-            //genderField.setText("Gender: ${user?.gender}")
 
             emailField.setText("${user?.email?:""}")
             phoneNumberField.setText("${user?.phoneNumber?:""}")
 
-            //skillsField.setText("Skills level: ${user?.level}")
-            //sport.text = "Favourite sport: ${user?.sport}"
             prevExpField.setText("${user?.experience?:""}")
 
-            //favCity.text = "City for playing: ${user?.city}"
-            //favDay.text = "Favourite day for a game: ${user?.weekday}"
-            //favSlot.text = "Favourite hour for a game: ${user?.slotfav}"
+
+            val genderPosition=genderList.indexOf("${user?.gender}")
+            val cityPosition=cityList.indexOf("${user?.city}")
+            val sportPosition=sportList.indexOf("${user?.sport}")
+            val levelPosition=levelList.indexOf("${user?.level}")
+            val slotPosition=slotsList.indexOf("${user?.slotfav}")
+            val dayPosition=dayList.indexOf("${user?.weekday}")
+
+            Log.d(TAG, genderPosition.toString())
+
+            genderField.setSelection(genderPosition)
+            favCity.setSelection(cityPosition)
+            sport.setSelection(sportPosition)
+            skillsField.setSelection(levelPosition)
+            favSlot.setSelection(slotPosition-1)
+            favDay.setSelection(dayPosition)
         }
 
         //Saved image
