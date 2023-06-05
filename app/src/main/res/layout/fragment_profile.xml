@@ -197,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
-                android:background="#3F51B5"
+                android:backgroundTint="#3F51B5"
                 android:text="Edit" />
 
             <com.google.android.material.button.MaterialButton

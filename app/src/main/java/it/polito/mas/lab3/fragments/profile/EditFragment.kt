@@ -32,13 +32,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import it.polito.mas.lab3.MainActivity
 import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.ReservationViewModel
 import it.polito.mas.lab3.data.user.User
 import it.polito.mas.lab3.data.user.UserViewModel
 import org.json.JSONObject
-import org.w3c.dom.Text
 import java.io.File
 import java.io.FileDescriptor
 import java.io.FileInputStream
@@ -53,7 +51,6 @@ class EditFragment : Fragment() {
     private lateinit var usernameField: EditText
     private lateinit var ageField: EditText
     private lateinit var genderField: Spinner
-
 
     lateinit var phoneNumberField: EditText
 
@@ -173,7 +170,7 @@ class EditFragment : Fragment() {
             }else {
                 phoneNumberField.setText("${user?.phoneNumber ?: ""}")
             }
-            emailField.setText(user?.email?:"")
+            emailField.text = user?.email?:""
             prevExpField.setText(user?.experience?:"")
 
 
@@ -234,22 +231,18 @@ class EditFragment : Fragment() {
 
         saveChanges.setOnClickListener {
 
-
-
-            var _age: Int?
-            var _phoneNumber: Int?
             val email = emailField.text.toString()?:null
             val username = usernameField.text.toString()?:null
             val name = nameField.text.toString()?:null
-            if (ageField.text.toString()==""){
-                _age = 0
-            } else { _age = ageField.text.toString().toInt()?:null}
-            val age = _age
+            val age = if(ageField.text.toString() != "")
+                ageField.text.toString().toInt()
+            else
+                null
             val gender = genderField.selectedItem.toString()?:null
-            if (phoneNumberField.text.toString()==""){
-                _phoneNumber = 0
-            }else{ _phoneNumber = phoneNumberField.text.toString().toInt()?:null}
-            val phoneNumber = _phoneNumber
+            val phoneNumber = if (phoneNumberField.text.toString() != "")
+                phoneNumberField.text.toString().toInt()
+            else
+                null
             val sport = sport.selectedItem.toString()?:null
             val level = skillsField.selectedItem.toString()?:null
             val experience = prevExpField.text.toString()?:null
@@ -257,22 +250,32 @@ class EditFragment : Fragment() {
             val weekday = favDay.selectedItem.toString()?:null
             val slotfav = favSlot.selectedItem.toString()?:null
 
-            val user = User(email, username, name, age, gender, phoneNumber, sport, level,
-                experience,city, weekday,slotfav)
+            if (age != null && age >= 80) {
+                Toast.makeText(
+                    requireContext(),
+                    "Error. Age must be below 80.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else{
+                if (username != null) {
+                    vm.checkUsernameAvailability(username) { isAvailable ->
+                        if (isAvailable) {
+                            val user = User(
+                                email, username, name, age, gender, phoneNumber, sport, level,
+                                experience, city, weekday, slotfav
+                            )
+                            vm.updateUser(user)
 
-            if (username != null) {
-                vm.checkUsernameAvailability(username) { isAvailable ->
-                    if ( isAvailable) {
-                        vm.updateUser(user)
-                        findNavController().navigate(R.id.action_edit_profileFragment_to_profileFragment)
-
-                    } else {
-                        val context: Context = requireContext()
-                        Toast.makeText(context,
-                            "El nombre de usuario ya está registrado. Por favor, elige otro.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
+                            findNavController().navigate(R.id.action_edit_profileFragment_to_profileFragment)
+                        } else {
+                            val context: Context = requireContext()
+                            Toast.makeText(
+                                context,
+                                "This username is not present in our database, please choose another.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }

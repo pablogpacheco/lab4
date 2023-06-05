@@ -6,15 +6,14 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.room.ColumnInfo
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import it.polito.mas.lab3.data.Reservation
 import it.polito.mas.lab3.data.ReservationViewModel
-import java.util.*
+import java.lang.NullPointerException
 
 
 
@@ -27,10 +26,10 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
     val user: LiveData<User?> get() = _user
 
 
-    private val currentUser = FirebaseAuth.getInstance().currentUser
+    //private val currentUser = FirebaseAuth.getInstance().currentUser
     //LiveData for username selection:
-    private val mutableNameList = MutableLiveData<List<Reservation>>()
-    val filteredByNameData: LiveData<List<Reservation>> get() = mutableNameList
+    //private val mutableNameList = MutableLiveData<List<Reservation>>()
+    //val filteredByNameData: LiveData<List<Reservation>> get() = mutableNameList
 
     //Firestore db
     val db = Firebase.firestore
@@ -58,24 +57,24 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
 
         val documentId = email
         db.collection("users")
-            .document(documentId!!)
+            .document(documentId)
             .get()
             .addOnSuccessListener { document ->
                 if(document.exists()) {
-                    val email = document.getString("email")?:null!!
-                    val username = document.getString("username")?:null!!
-                    val name = document.getString("name")?:null!!
-                    val age = document.getLong("age")?.toInt()?:null!!
-                    val gender = document.getString("gender")?:null!!
-                    val phoneNumber = document.getLong("phoneNumber")?.toInt()?:null!!
-                    val sport = document.getString("sport")?:null!!
-                    val level = document.getString("level")?:null!!
-                    val experience = document.getString("experience")?:null!!
-                    val city = document.getString("city")?:null!!
-                    val weekday = document.getString("weekday")?:null!!
-                    val slotfav = document.getString("slotfav")?:null!!
+                    val newEmail = databaseAccessString(document, "email")
+                    val username = databaseAccessString(document, "username")
+                    val name = databaseAccessString(document, "name")
+                    val age = databaseAccessInt(document, "age")
+                    val gender = databaseAccessString(document, "gender")
+                    val phoneNumber = databaseAccessInt(document, "phoneNumber")
+                    val sport = databaseAccessString(document, "sport")
+                    val level = databaseAccessString(document, "level")
+                    val experience = databaseAccessString(document, "experience")
+                    val city = databaseAccessString(document, "city")
+                    val weekday = databaseAccessString(document, "weekday")
+                    val slotfav = databaseAccessString(document, "slotfav")
 
-                    val user = User(email, username, name, age, gender, phoneNumber, sport, level,
+                    val user = User(newEmail, username, name, age, gender, phoneNumber, sport, level,
                     experience,city, weekday,slotfav)
 
                     _user.value = user
@@ -184,8 +183,6 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
         }
     }
 
-
-
     fun saveUsernameToFirebase(username: String, email: String) {
 
         // Crea un objeto Map para almacenar los datos a actualizar en la base de datos
@@ -245,8 +242,6 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
             }
     }
 
-
-
     fun deleteUser(user: User){
 
         val collectionRef = db.collection("users")
@@ -263,5 +258,30 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
                 // Ocurrió un error al eliminar el documento
                 Log.e(TAG, "Error deleting", e)
             }
+    }
+
+    private fun databaseAccessString(document: DocumentSnapshot, value: String) : String {
+        val string : String = try {
+            document.getString(value).toString()
+        }
+        catch (e : NullPointerException){
+            null!!
+        }
+
+        return string
+    }
+
+    private fun databaseAccessInt(document: DocumentSnapshot, value: String) : Int? {
+        val number : Int? = try {
+            document.getLong(value)?.toInt() ?: null!!
+        }
+        catch (e : NullPointerException){
+            null
+        }
+        catch (p: java.lang.NumberFormatException){
+            null
+        }
+
+        return number
     }
 }
