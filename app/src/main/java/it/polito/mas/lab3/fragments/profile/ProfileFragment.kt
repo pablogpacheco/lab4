@@ -84,7 +84,7 @@ class ProfileFragment : Fragment() {
         vm.user.observe(viewLifecycleOwner) { user ->
             fullName.text = "Full name: ${user?.name?:""}"
             if(user?.age==0) {
-                age.text = ""
+                age.text = "Age: "
             }else {
                 age.text = "Age: ${user?.age?:""}"
             }
@@ -94,7 +94,7 @@ class ProfileFragment : Fragment() {
 
             email.text = "Email: ${user?.email?:""}"
             if(user?.phoneNumber==0){
-                phoneNumber.text = ""
+                phoneNumber.text = "Phone number: "
             }else {
                 phoneNumber.text = "Phone number: ${user?.phoneNumber ?: ""}"
             }
