@@ -19,28 +19,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/display_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/purple_700"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/display_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/purple_700"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.stacktips.view.CustomCalendarView
-        android:layout_marginTop="16dp"
-        android:id="@+id/calendar_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/display_user">
-
-    </com.stacktips.view.CustomCalendarView>
+            <com.stacktips.view.CustomCalendarView
+                android:layout_marginTop="16dp"
+                android:id="@+id/calendar_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/display_user">
+            </com.stacktips.view.CustomCalendarView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="16dp"
@@ -48,7 +47,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-
+            <TextView
+                android:id="@+id/void_calendar"
+                android:gravity="center_horizontal"
+                android:visibility="invisible"
+                android:text="No reservation present. \n Go to Availability to add one!"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#FF0000"/>
 
         </LinearLayout>
 

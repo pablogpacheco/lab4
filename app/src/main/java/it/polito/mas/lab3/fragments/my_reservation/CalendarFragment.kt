@@ -45,15 +45,13 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
     private lateinit var displayUser : TextView
     private lateinit var recyclerView : RecyclerView
     private lateinit var reservationAdapter: ReservationAdapter
-    private lateinit var reservedDates: List<Reservation>
+    private var reservedDates = listOf<Reservation>()
 
-
+    private lateinit var voidCalendar: TextView
 
     private val vm by viewModels<ReservationViewModel>()
     //private val vmU by viewModels<UserViewModel>()
     private val currentUser = FirebaseAuth.getInstance().currentUser
-
-
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -84,18 +82,13 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
                 Log.e(TAG, "Error obtaining user", exception)
             }
         Log.d(TAG, "Obtaining user===========> $myUser")
-        //Display the user:
-        /*vmU.getUsername()
-        myUser = vmU.username.value!!
-
-         */
-
 
         //Set the calendar and color the days where there's a reservation:
         val decorators : MutableList<DayDecorator> = mutableListOf()
         val currentCalendar = Calendar.getInstance(Locale.getDefault())
 
         calendarView = view.findViewById(R.id.calendar_view)
+        voidCalendar = view.findViewById(R.id.void_calendar)
 
         //Define the RecyclerView:
         recyclerView = view.findViewById(R.id.calendarRecyclerView)
@@ -111,11 +104,12 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
                 decorators.add(ValidDate(reservedDates))
                 calendarView.decorators = decorators
                 calendarView.refreshCalendar(currentCalendar)
+                voidCalendar.visibility = View.INVISIBLE
+            }
+            else {
+                voidCalendar.visibility = View.VISIBLE
             }
         }
-
-
-
 
         return view
     }
@@ -124,49 +118,48 @@ class CalendarFragment : Fragment(), ReservationAdapter.OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         calendarView.setCalendarListener(object : CalendarListener {
-            @SuppressLint("SimpleDateFormat")
-            override fun onDateSelected(date: Date?) {
 
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-                val actualDate = dateFormat.parse(dateFormat.format(date!!))
-                val actualList = mutableListOf<Reservation>()
+                @SuppressLint("SimpleDateFormat")
+                override fun onDateSelected(date: Date?) {
 
-                //Check if the list of the user for this date contains reservations:
-                if (vm.filteredByNameData.value != null) {
-                    if (vm.filteredByNameData.value!!.isNotEmpty()) {
-                        for (element in vm.filteredByNameData.value!!) {
-                            if(element.date == actualDate){
-                                actualList.add(element)
+                    val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                    val actualDate = dateFormat.parse(dateFormat.format(date!!))
+                    val actualList = mutableListOf<Reservation>()
+
+                    //Check if the list of the user for this date contains reservations:
+                    if (vm.filteredByNameData.value != null) {
+                        if (vm.filteredByNameData.value!!.isNotEmpty()) {
+                            for (element in vm.filteredByNameData.value!!) {
+                                if (element.date == actualDate) {
+                                    actualList.add(element)
+                                }
+                            }
+
+                            //Set the adapter:
+                            if (actualList.isEmpty()) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "No reservation present in this date.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                reservationAdapter.setData(actualList)
+                                recyclerView.adapter = reservationAdapter
                             }
                         }
-
-                        //Set the adapter:
-                        if (actualList.isEmpty()){
-                            Toast.makeText(
-                                requireContext(),
-                                "No reservation present in this date.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else{
-                            reservationAdapter.setData(actualList)
-                            recyclerView.adapter = reservationAdapter
-                        }
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "No reservation present in this date.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
-                else{
-                    Toast.makeText(
-                        requireContext(),
-                        "No reservation present in this date.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                override fun onMonthChanged(monthStartDate: Date?) {
+                    // Do something when the month changes
                 }
-            }
-
-            override fun onMonthChanged(monthStartDate: Date?) {
-                // Do something when the month changes
-            }
-        })
-
+            })
 
     }
 
