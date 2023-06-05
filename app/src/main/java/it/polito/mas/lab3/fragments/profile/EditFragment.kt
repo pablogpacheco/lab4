@@ -158,11 +158,17 @@ class EditFragment : Fragment() {
         vm.user.observe(viewLifecycleOwner) { user ->
             nameField .setText("${user?.name?:""}")
             usernameField.setText("${user?.username?:""}")
-            ageField.setText("${user?.age?:""}")
-
+            if(user?.age==0) {
+                ageField.setText("")
+            }else {
+                ageField.setText("${user?.age?:""}")
+            }
+            if(user?.phoneNumber==0) {
+                phoneNumberField.setText("")
+            }else {
+                phoneNumberField.setText("${user?.phoneNumber ?: ""}")
+            }
             emailField.setText("${user?.email?:""}")
-            phoneNumberField.setText("${user?.phoneNumber?:""}")
-
             prevExpField.setText("${user?.experience?:""}")
 
 

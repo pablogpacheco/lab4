@@ -78,31 +78,26 @@ class ProfileFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         val emailAddress = currentUser?.email
-        val document = db.collection("users").document(currentUser?.email!!)
-        var myUser=""
-        document.get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val username = documentSnapshot.getString("username")
-                    myUser = username!!
-                    userName = view.findViewById(R.id.username)
-                    userName.text = "Username: ${myUser}"
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.e(CalendarFragment.TAG, "Error obtaining user", exception)
-            }
-        Log.d(CalendarFragment.TAG, "Obtaining user===========> ${myUser}")
 
         vm.getUser(emailAddress!!)
 
         vm.user.observe(viewLifecycleOwner) { user ->
             fullName.text = "Full name: ${user?.name?:""}"
-            age.text = "Age: ${user?.age?:""}"
+            if(user?.age==0) {
+                age.text = ""
+            }else {
+                age.text = "Age: ${user?.age?:""}"
+            }
             gender.text = "Gender: ${user?.gender?:""}"
+            userName.text = "Username: ${user?.username?:""}"
+
 
             email.text = "Email: ${user?.email?:""}"
-            phoneNumber.text = "Phone number: ${user?.phoneNumber?:""}"
+            if(user?.phoneNumber==0){
+                phoneNumber.text = ""
+            }else {
+                phoneNumber.text = "Phone number: ${user?.phoneNumber ?: ""}"
+            }
 
             skills.text = "Skills level: ${user?.level?:""}"
             sport.text = "Favourite sport: ${user?.sport?:""}"
@@ -116,6 +111,8 @@ class ProfileFragment : Fragment() {
         fullName = view.findViewById(R.id.name)
         age = view.findViewById(R.id.age)
         gender = view.findViewById(R.id.gender)
+        userName = view.findViewById(R.id.username)
+
 
         email = view.findViewById(R.id.email)
         phoneNumber= view.findViewById(R.id.phoneNumber)

@@ -26,6 +26,7 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
     private val _user = MutableLiveData<User?>()
     val user: LiveData<User?> get() = _user
 
+
     private val currentUser = FirebaseAuth.getInstance().currentUser
     //LiveData for username selection:
     private val mutableNameList = MutableLiveData<List<Reservation>>()
@@ -89,44 +90,11 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
             }
 
     }
-/*
-    fun getUser(user: User) {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-
-
-             db.collection("users")
-                .document(user.email)
-                .get()
-                .addOnSuccessListener { querySnapshot ->
-                    Log.d(TAG, "ok")
-                }
-                .addOnFailureListener { e ->
-                    Log.e(TAG, "Error obtaining user", e)
-                }
-
-    }
 
 
 
-    fun getUsername() {
 
-        val document = db.collection("users").document(currentUser?.email!!)
-        document.get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val username = documentSnapshot.getString("username")
-                    _username.value = username
-                } else {
-                    _username.value = null
-                }
-            }
-            .addOnFailureListener { exception ->
-                _username.value = null
-                Log.e(TAG, "Error obtaining user", exception)
-            }
-    }
 
- */
 
 
     fun checkUser(email: String): Boolean {
@@ -160,8 +128,19 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
                     Log.d(TAG, "No hay coleccion==========================================")
 
                     val documentId = email
+
                     val userData = hashMapOf<String, Any>(
-                        "email" to email
+                        "email" to email,
+                        "name" to  "",
+                        "age" to 0,
+                        "gender" to "",
+                        "phoneNumber" to 0,
+                        "sport" to "",
+                        "level" to "",
+                        "experience" to "",
+                        "city" to "",
+                        "weekday" to "",
+                        "slotfav" to ""
                     )
                     db.collection("users")
                         .document(documentId)
