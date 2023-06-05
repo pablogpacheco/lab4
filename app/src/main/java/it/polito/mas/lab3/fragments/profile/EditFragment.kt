@@ -25,12 +25,14 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import it.polito.mas.lab3.MainActivity
 import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.ReservationViewModel
 import it.polito.mas.lab3.data.user.User
@@ -257,92 +259,24 @@ class EditFragment : Fragment() {
 
             val user = User(email, username, name, age, gender, phoneNumber, sport, level,
                 experience,city, weekday,slotfav)
-            vm.updateUser(user)
 
-            /*
+            if (username != null) {
+                vm.checkUsernameAvailability(username) { isAvailable ->
+                    if ( isAvailable) {
+                        vm.updateUser(user)
+                        findNavController().navigate(R.id.action_edit_profileFragment_to_profileFragment)
 
-            val deserializeString = sharedPref?.getString("profile", "")
-            val deserializeJson = if (deserializeString != ""){
-                JSONObject(deserializeString!!)
-            } else{
-                JSONObject()
+                    } else {
+                        val context: Context = requireContext()
+                        Toast.makeText(context,
+                            "El nombre de usuario ya está registrado. Por favor, elige otro.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                    }
+                }
             }
 
-
-            //Edit the SharedPreferences:
-            with(sharedPref.edit()) {
-
-                //Create the JSON Object:
-                val jsonObj = JSONObject()
-
-                if (nameField.text.isNotBlank()) {
-                    jsonObj.put("name", nameField.text.toString())
-                } else {
-                    jsonObj.put("name", deserializeJson.optString("name"))
-                }
-                if (usernameField.text.isNotBlank()) {
-                    jsonObj.put("username", usernameField.text.toString())
-                } else {
-                    jsonObj.put("username", deserializeJson.optString("username"))
-
-                }
-                if (ageField.text.isNotBlank()) {
-                    jsonObj.put("age", ageField.text.toString())
-                } else {
-                    jsonObj.put("age", deserializeJson.optString("age"))
-                }
-                val genderChosen = genderField.selectedItem.toString()
-                jsonObj.put("gender", genderChosen)
-
-                if (emailField.text.isNotBlank()) {
-                    jsonObj.put("email", emailField.text.toString())
-                } else {
-                    jsonObj.put("email", deserializeJson.optString("email"))
-
-                }
-                if (phoneNumberField.text.isNotBlank()) {
-                    jsonObj.put("phoneNumber", phoneNumberField.text.toString())
-                } else {
-                    jsonObj.put("phoneNumber", deserializeJson.optString("phoneNumber"))
-
-                }
-
-                val sportChosen = sport.selectedItem.toString()
-                jsonObj.put("favourite_sport", sportChosen)
-                val skillChosen = skillsField.selectedItem.toString()
-                jsonObj.put("skills", skillChosen)
-                if (prevExpField.text.isNotBlank()) {
-                    jsonObj.put("prev_exp", prevExpField.text.toString())
-                } else {
-                    jsonObj.put("prev_exp", deserializeJson.optString("prev_exp"))
-                }
-
-                val cityChosen = favCity.selectedItem.toString()
-                jsonObj.put("fav_city", cityChosen)
-                val dayChosen = favDay.selectedItem.toString()
-                jsonObj.put("fav_day", dayChosen)
-                val slotChosen = favSlot.selectedItem.toString()
-                jsonObj.put("fav_slot", slotChosen)
-
-                //Serialize the JSON:
-                val jsonString = jsonObj.toString()
-
-                //Put the string in the sharedPref:
-                this?.putString("profile", jsonString)
-                this?.apply()
-            }
-
-            //val bundle = Bundle()
-            //bundle.putString("name", nameField.text.toString())
-            //bundle.putString("nickname", nicknameField.text.toString())
-            //bundle.putString("email", emailField.text.toString())
-            //bundle.putString("phoneNumber", phoneNumberField.text.toString())
-
-            //val intent = Intent(this, ShowProfileActivity::class.java)
-            //intent.putExtras(bundle)
-
-             */
-            findNavController().navigate(R.id.action_edit_profileFragment_to_profileFragment)
         }
         return view
     }

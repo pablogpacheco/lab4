@@ -91,9 +91,19 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
 
     }
 
-
-
-
+    fun getUsername (email: String):String {
+        val documentId = email
+        var _username = ""
+        db.collection("users")
+            .document(documentId!!)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    _username = document.getString("username")!!
+                }
+            }
+        return _username
+    }
 
 
 
