@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.ColumnInfo
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import it.polito.mas.lab3.data.Reservation
@@ -22,8 +23,8 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
     //All the data from the database:
 
 
-    private val _username = MutableLiveData<String?>()
-    val username: LiveData<String?> get() = _username
+    private val _user = MutableLiveData<User?>()
+    val user: LiveData<User?> get() = _user
 
     private val currentUser = FirebaseAuth.getInstance().currentUser
     //LiveData for username selection:
@@ -51,6 +52,43 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
             }
 
     }
+
+    fun getUser(email: String) {
+
+        val documentId = email
+        db.collection("users")
+            .document(documentId!!)
+            .get()
+            .addOnSuccessListener { document ->
+                if(document.exists()) {
+                    val email = document.getString("email")?:null!!
+                    val username = document.getString("username")?:null!!
+                    val name = document.getString("name")?:null!!
+                    val age = document.getLong("age")?.toInt()?:null!!
+                    val gender = document.getString("gender")?:null!!
+                    val phoneNumber = document.getLong("phoneNumber")?.toInt()?:null!!
+                    val sport = document.getString("sport")?:null!!
+                    val level = document.getString("level")?:null!!
+                    val experience = document.getString("experience")?:null!!
+                    val city = document.getString("city")?:null!!
+                    val weekday = document.getString("weekday")?:null!!
+                    val slotfav = document.getString("slotfav")?:null!!
+
+                    val user = User(email, username, name, age, gender, phoneNumber, sport, level,
+                    experience,city, weekday,slotfav)
+
+                    _user.value = user
+
+                    Log.d(TAG, "User saved")
+                } else {
+                    Log.d(TAG, "User document not found")
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e(TAG, "Error saving user", e)
+            }
+
+    }
 /*
     fun getUser(user: User) {
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -68,7 +106,7 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
 
     }
 
- */
+
 
     fun getUsername() {
 
@@ -87,6 +125,8 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
                 Log.e(TAG, "Error obtaining user", exception)
             }
     }
+
+ */
 
 
     fun checkUser(email: String): Boolean {
@@ -183,18 +223,18 @@ class UserViewModel (application: Application): AndroidViewModel(application) {
                 val reservationsList = mutableListOf<User>()
 
                 for (document in querySnapshot) {
-                    val email = document.getString("email")
-                    val username = document.getString("username")
-                    val name = document.getString("name")
-                    val age = document.getLong("age")?.toInt()
-                    val gender = document.getString("gender")
-                    val phoneNumber = document.getLong("phoneNumber")?.toInt()
-                    val sport = document.getString("sport")
-                    val level = document.getString("level")
-                    val experience = document.getString("experience")
-                    val city = document.getString("city")
-                    val weekday = document.getString("weekday")
-                    val slotfav = document.getString("slotfav")
+                    val email = document.getString("email")?:null!!
+                    val username = document.getString("username")?:null!!
+                    val name = document.getString("name")?:null!!
+                    val age = document.getLong("age")?.toInt()?:null!!
+                    val gender = document.getString("gender")?:null!!
+                    val phoneNumber = document.getLong("phoneNumber")?.toInt()?:null!!
+                    val sport = document.getString("sport")?:null!!
+                    val level = document.getString("level")?:null!!
+                    val experience = document.getString("experience")?:null!!
+                    val city = document.getString("city")?:null!!
+                    val weekday = document.getString("weekday")?:null!!
+                    val slotfav = document.getString("slotfav")?:null!!
 
                     val user = User(
                         email,

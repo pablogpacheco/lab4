@@ -26,10 +26,12 @@ import android.widget.Spinner
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import it.polito.mas.lab3.R
 import it.polito.mas.lab3.data.ReservationViewModel
+import it.polito.mas.lab3.data.user.User
 import it.polito.mas.lab3.data.user.UserViewModel
 import org.json.JSONObject
 import java.io.File
@@ -77,6 +79,8 @@ class EditFragment : Fragment() {
     //Let's declare the viewModel:
     private val vm by viewModels<UserViewModel>()
 
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+
 
     @SuppressLint("ObsoleteSdkInt", "MissingInflatedId")
     override fun onCreateView(
@@ -85,6 +89,8 @@ class EditFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
+
+        val emailAddress = currentUser?.email
 
         //Ask for permission of camera upon first launch of application
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -126,11 +132,30 @@ class EditFragment : Fragment() {
         cancelButton = view.findViewById(R.id.cancelButton)
 
         //Get from firebase User
-        vm.getAll()
+        vm.getUser(emailAddress!!)
+
+        vm.user.observe(viewLifecycleOwner) { user ->
+            nameField .setText("${user?.name?:""}")
+            usernameField.setText("${user?.username?:""}")
+            ageField.setText("${user?.age?:""}")
+            //genderField.setText("Gender: ${user?.gender}")
+
+            emailField.setText("${user?.email?:""}")
+            phoneNumberField.setText("${user?.phoneNumber?:""}")
+
+            //skillsField.setText("Skills level: ${user?.level}")
+            //sport.text = "Favourite sport: ${user?.sport}"
+            prevExpField.setText("${user?.experience?:""}")
+
+            //favCity.text = "City for playing: ${user?.city}"
+            //favDay.text = "Favourite day for a game: ${user?.weekday}"
+            //favSlot.text = "Favourite hour for a game: ${user?.slotfav}"
+        }
 
         //Saved image
         loadImageFromStorage()
 
+        /*
         val sharedPref = activity?.getSharedPreferences("app_pref", Context.MODE_PRIVATE)
 
         //Check if the precences contain the "profile" key:
@@ -149,6 +174,8 @@ class EditFragment : Fragment() {
             prevExpField.setText(deserializeJson.optString("prev_exp"))
         }
 
+         */
+
         //To open a context menu by clicking on a button, you have to register the button
         registerForContextMenu(imageButton)
 
@@ -164,6 +191,28 @@ class EditFragment : Fragment() {
         }
 
         saveChanges.setOnClickListener {
+
+
+
+
+            val email = emailField.text.toString()?:null
+            val username = usernameField.text.toString()?:null
+            val name = nameField.text.toString()?:null
+            val age = ageField.text.toString().toInt()?:null
+            val gender = genderField.selectedItem.toString()?:null
+            val phoneNumber = phoneNumberField.text.toString().toInt()?:null
+            val sport = sport.selectedItem.toString()?:null
+            val level = skillsField.selectedItem.toString()?:null
+            val experience = prevExpField.text.toString()?:null
+            val city = favCity.selectedItem.toString()?:null
+            val weekday = favDay.selectedItem.toString()?:null
+            val slotfav = favSlot.selectedItem.toString()?:null
+
+            val user = User(email, username, name, age, gender, phoneNumber, sport, level,
+                experience,city, weekday,slotfav)
+            vm.updateUser(user)
+
+            /*
 
             val deserializeString = sharedPref?.getString("profile", "")
             val deserializeJson = if (deserializeString != ""){
@@ -244,10 +293,10 @@ class EditFragment : Fragment() {
 
             //val intent = Intent(this, ShowProfileActivity::class.java)
             //intent.putExtras(bundle)
+
+             */
             findNavController().navigate(R.id.action_edit_profileFragment_to_profileFragment)
-
         }
-
         return view
     }
 

@@ -6,6 +6,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +14,18 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import it.polito.mas.lab3.EditProfileActivity
 import it.polito.mas.lab3.LoginActivity
 import it.polito.mas.lab3.R
+import it.polito.mas.lab3.data.ReservationViewModel
+import it.polito.mas.lab3.data.user.UserViewModel
+import it.polito.mas.lab3.fragments.my_reservation.CalendarFragment
 import org.json.JSONObject
 import java.io.File
 import java.io.FileInputStream
@@ -51,6 +57,17 @@ class ProfileFragment : Fragment() {
     private lateinit var auth : FirebaseAuth
     private lateinit var logoutButton: Button
 
+    private val vm by viewModels<UserViewModel>()
+
+    val db = Firebase.firestore
+
+    companion object {
+        const val TAG = "FirestoreApp"
+    }
+
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+
+
     @SuppressLint("SetTextI18n", "MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +77,42 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        userName = view.findViewById(R.id.username)
+        val emailAddress = currentUser?.email
+        val document = db.collection("users").document(currentUser?.email!!)
+        var myUser=""
+        document.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val username = documentSnapshot.getString("username")
+                    myUser = username!!
+                    userName = view.findViewById(R.id.username)
+                    userName.text = "Username: ${myUser}"
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e(CalendarFragment.TAG, "Error obtaining user", exception)
+            }
+        Log.d(CalendarFragment.TAG, "Obtaining user===========> ${myUser}")
+
+        vm.getUser(emailAddress!!)
+
+        vm.user.observe(viewLifecycleOwner) { user ->
+            fullName.text = "Full name: ${user?.name?:""}"
+            age.text = "Age: ${user?.age?:""}"
+            gender.text = "Gender: ${user?.gender?:""}"
+
+            email.text = "Email: ${user?.email?:""}"
+            phoneNumber.text = "Phone number: ${user?.phoneNumber?:""}"
+
+            skills.text = "Skills level: ${user?.level?:""}"
+            sport.text = "Favourite sport: ${user?.sport?:""}"
+            prevExp.text = "Previous Experience: ${user?.experience?:""}"
+
+            favCity.text = "City for playing: ${user?.city?:""}"
+            favDay.text = "Favourite day for a game: ${user?.weekday?:""}"
+            favSlot.text = "Favourite hour for a game: ${user?.slotfav?:""}"
+        }
+
         fullName = view.findViewById(R.id.name)
         age = view.findViewById(R.id.age)
         gender = view.findViewById(R.id.gender)
@@ -82,9 +134,11 @@ class ProfileFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         logoutButton = view.findViewById(R.id.signOutBtn)
 
+
         //Set Image
         loadImageFromStorage()
 
+        /*
         val sharedPref = activity?.getSharedPreferences("app_pref", Context.MODE_PRIVATE)
 
         //Check if the precences contain the "profile" key:
@@ -127,6 +181,8 @@ class ProfileFragment : Fragment() {
             favSlot.text = "Favourite hour for a game: none"
         }
 
+
+         */
         editButton.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_edit_profileFragment)
             //startActivity(Intent(requireContext(), EditProfileActivity::class.java))
