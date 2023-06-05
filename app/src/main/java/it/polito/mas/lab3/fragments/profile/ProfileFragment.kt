@@ -128,8 +128,8 @@ class ProfileFragment : Fragment() {
         }
 
         editButton.setOnClickListener {
-            //findNavController().navigate(R.id.action_profileFragment_to_edit_profileFragment)
-            startActivity(Intent(requireContext(), EditProfileActivity::class.java))
+            findNavController().navigate(R.id.action_profileFragment_to_edit_profileFragment)
+            //startActivity(Intent(requireContext(), EditProfileActivity::class.java))
 
         }
 

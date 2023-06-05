@@ -24,8 +24,13 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import it.polito.mas.lab3.R
+import it.polito.mas.lab3.data.ReservationViewModel
+import it.polito.mas.lab3.data.user.UserViewModel
 import org.json.JSONObject
 import java.io.File
 import java.io.FileDescriptor
@@ -62,6 +67,15 @@ class EditFragment : Fragment() {
     var image_uri: Uri? = null
     private val RESULT_LOAD_IMAGE = 123
     val IMAGE_CAPTURE_CODE = 654
+
+    val db = Firebase.firestore
+
+    companion object {
+        const val TAG = "FirestoreApp"
+    }
+
+    //Let's declare the viewModel:
+    private val vm by viewModels<UserViewModel>()
 
 
     @SuppressLint("ObsoleteSdkInt", "MissingInflatedId")
@@ -110,6 +124,9 @@ class EditFragment : Fragment() {
         saveChanges = view.findViewById(R.id.saveChanges)
         frame = view.findViewById(R.id.imageView)
         cancelButton = view.findViewById(R.id.cancelButton)
+
+        //Get from firebase User
+        vm.getAll()
 
         //Saved image
         loadImageFromStorage()
